@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct GotifyError : Error, Decodable, Equatable {
+struct GotifyError: Error, Decodable, Equatable {
     var error: String
-    var errorCode : Int64
+    var errorCode: Int64
     var errorDescription: String
-    
+
     static func unknown() -> GotifyError {
         return .init(
             error: "There was an issue during transmission.",

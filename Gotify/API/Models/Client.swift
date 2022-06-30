@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Client : Identifiable {
+struct Client: Identifiable {
     let id: Int64
     var name: String
     let token: String

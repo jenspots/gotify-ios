@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User : Identifiable {
+struct User: Identifiable {
     let id: Int64
     var admin: Bool?
     var name: String
