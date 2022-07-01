@@ -1,8 +1,8 @@
 //
-//  Paging.swift
+//  PagingModel.swift
 //  Gotify
 //
-//  Created by Jens Pots on 28/06/2022.
+//  Created by Jens Pots on 01/07/2022.
 //
 
 import Foundation

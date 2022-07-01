@@ -11,8 +11,8 @@ struct ContentView: View {
     var body: some View {
         TabView {
             ApplicationListView()
-            .tabItem { Label("Applications", systemImage: "antenna.radiowaves.left.and.right")}
-
+            .tabItem { Label("Applications", systemImage: "antenna.radiowaves.left.and.right") }
+            
             SettingsView()
             .tabItem { Label("Settings", systemImage: "gear")}
         }

@@ -77,22 +77,27 @@ struct ApplicationDetailView: View {
                             Image(uiImage: selection)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 70)
-                                .blur(radius: editing?.wrappedValue == .active ? 10 : 0.0)
-                                .mask(Circle())
-                                .brightness(editing?.wrappedValue == .active ? -0.5 : 0.0)
-                                .onTapGesture {
-                                    if editing?.wrappedValue == .active {
-                                        showPopover = true
-                                    }
+                                .frame(width: 100)
+
+                            VStack {
+                                Spacer()
+                                if editing?.wrappedValue == .active {
+                                    Text("Edit")
+                                        .textCase(.none)
+                                        .frame(width: 100, height: 30)
+                                        .background(.thinMaterial)
+                                        .colorInvert()
                                 }
 
-                            if editing?.wrappedValue == .active {
-                                Text("Edit")
-                                    .font(.footnote)
-                                    .colorInvert()
                             }
                         }
+                        .mask(Circle())
+                        .onTapGesture {
+                            if editing?.wrappedValue == .active {
+                                showPopover = true
+                            }
+                        }
+
 
                         if editing?.wrappedValue == .active {
                             TextField("Name", text: $title)
@@ -158,7 +163,15 @@ struct ApplicationDetailView: View {
         .refreshable { await refresh() }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                EditButton()
+                if editing?.wrappedValue == .active {
+                    Button("Done") {
+                        editing?.wrappedValue = .inactive
+                    }
+                } else {
+                    Button("Edit") {
+                        editing?.wrappedValue = .active
+                    }
+                }
             }
         }
         .onChange(of: editing!.wrappedValue, perform: { value in

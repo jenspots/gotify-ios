@@ -33,28 +33,15 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             List {
+                Section {
+                    ServerRowComponent(server: .shared, connected: true)
+                    ServerRowComponent(server: .init(serverUrl: "gotify.com", token: "secret-token"), connected: false)
+                }
+                
                 Section(header: Text("General")) {
                     Toggle(isOn: $allNotifications) {
                         Text("All Notifications")
                     }
-                }
-
-                Section(header: Text("Server Settings")) {
-                    HStack {
-                        Text("Server URL")
-                        TextField(values["server_url"] ?? "Add", text: $serverUrl)
-                            .textFieldStyle(.plain)
-                            .multilineTextAlignment(.trailing)
-                    }
-                    HStack {
-                        Text("Token")
-                        TextField(values["user_token"] ?? "Add", text: $newtoken)
-                            .textFieldStyle(.plain)
-                            .multilineTextAlignment(.trailing)
-                    }
-
-                    Text("Verify Connection")
-                        .foregroundColor(.blue)
                 }
 
                 Section(header: Text("Get Help")) {
