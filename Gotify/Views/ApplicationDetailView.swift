@@ -18,13 +18,13 @@ struct ApplicationDetailView: View {
     @State var about: String
 
     @FetchRequest
-    var messages: FetchedResults<MessageModel>
+    var messages: FetchedResults<Message>
     
-    init(application: ApplicationModel) {
+    init(application: Application) {
         self.application = application
         
-        _messages = FetchRequest<MessageModel>(
-            sortDescriptors: [NSSortDescriptor(keyPath: \MessageModel.date, ascending: false)],
+        _messages = FetchRequest<Message>(
+            sortDescriptors: [NSSortDescriptor(keyPath: \Message.date, ascending: false)],
             predicate: NSPredicate(format: "appid == %d", application.id),
             animation: .default
         )
@@ -34,27 +34,22 @@ struct ApplicationDetailView: View {
     }
 
 
-    @ObservedObject var application: ApplicationModel
+    @ObservedObject var application: Application
 
     @State var active: Bool = true
     
     func refresh() async {
-        await MessageModel.refresh(context: viewContext, application: application)
+        await Message.getAll(context: viewContext, application: application)
     }
     
     func delete(offsets: IndexSet) {
-        let deletables = offsets.map{ messages[$0] }
-
-        for deletable in deletables {
-            Task { await deletable.delete() }
-            viewContext.delete(deletable)
+        for deletable in offsets.map{ messages[$0] } {
+            Task { await deletable.delete(context: viewContext) }
         }
-
-        try? viewContext.save()
     }
 
     func deleteApp() {
-        Task { await application.delete() }
+        Task { await application.delete(context: viewContext) }
         viewContext.delete(application)
         try? viewContext.save()
         dismiss()
@@ -159,7 +154,6 @@ struct ApplicationDetailView: View {
         .listStyle(GroupedListStyle())
         .navigationBarTitle(application.name ?? "")
         .navigationBarTitleDisplayMode(.inline)
-        .task { await refresh() }
         .refreshable { await refresh() }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

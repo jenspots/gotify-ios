@@ -18,7 +18,7 @@ struct PersistenceController {
         let viewContext = result.container.viewContext
 
         /* An application */
-        let app = ApplicationModel(context: viewContext)
+        let app = Application(context: viewContext)
         app.id = 0
         app.token = "secret-token"
         app.image = "mascott"
@@ -28,7 +28,7 @@ struct PersistenceController {
 
         /* Messages */
         for i in 0..<10 {
-            let message = MessageModel(context: viewContext)
+            let message = Message(context: viewContext)
             message.id = Int64(i)
             message.message = "This is a dummy message"
             message.title = "Message Received"
@@ -66,7 +66,7 @@ struct PersistenceController {
         }
 
         /* Allows overwriting when identifiers match. */
-        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        container.viewContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
         
         /* Initialize. */
         container.loadPersistentStores { _, error in

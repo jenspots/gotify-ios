@@ -11,29 +11,44 @@ struct MessageDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) var dismiss
 
-    var application: ApplicationModel
-    var message: MessageModel
+    var application: Application
+    var message: Message
+    
+    @State var title: String
+    @State var messageBody: String
+    
+    init(application: Application, message: Message) {
+        self.application = application
+        self.message = message
+
+        _title = State(initialValue: message.title ?? "")
+        _messageBody = State(initialValue: message.message!)
+    }
 
     func delete() {
-        viewContext.delete(message)
-        try? viewContext.save()
+        Task { await message.delete(context: viewContext) }
         dismiss()
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            Text(message.title ?? "Notification")
-                .font(.title)
-                .fontWeight(.bold)
+        List {
+            ZStack {
+                TextEditor(text: $title)
+                    .font(.title.bold())
+                    .background(.ultraThickMaterial)
+                Text(title)
+                    .font(.title.bold())
+                    .opacity(0.0)
+            }
+            .listRowSeparator(.hidden)
             Text(message.date?.formatted(date: .numeric, time: .shortened) ?? "")
                 .font(.subheadline)
                 .fontWeight(.regular)
                 .foregroundColor(Color.gray)
-            Divider()
-                .padding(.vertical, 10)
             Text(message.message ?? "")
-            Spacer()
+                .listRowSeparator(.hidden)
         }
+        .listStyle(PlainListStyle())
         .frame(
           minWidth: 0,
           maxWidth: .infinity,
@@ -41,8 +56,7 @@ struct MessageDetailView: View {
           maxHeight: .infinity,
           alignment: .topLeading
         )
-        .padding()
-        .background(.ultraThickMaterial)
+        .background(.clear)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: delete) {
@@ -50,12 +64,15 @@ struct MessageDetailView: View {
                 }
             }
         }
+        .onDisappear {
+            
+        }
     }
 }
 
 struct MessageDetailView_Previews: PreviewProvider {
-    static var message: MessageModel = {
-        var result = MessageModel(context: PersistenceController.preview.container.viewContext)
+    static var message: Message = {
+        var result = Message(context: PersistenceController.preview.container.viewContext)
         result.message = "Hello, world!"
         result.priority = 0
         result.date = .now

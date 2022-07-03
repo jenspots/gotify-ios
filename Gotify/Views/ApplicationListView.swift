@@ -10,15 +10,11 @@ import SwiftUI
 struct ApplicationListView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ApplicationModel.name, ascending: true)], animation: .default)
-    var apps: FetchedResults<ApplicationModel>
-
-    func refreshData() async {
-        await ApplicationModel.refresh(context: viewContext)
-    }
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Application.name, ascending: true)], animation: .default)
+    var apps: FetchedResults<Application>
 
     func newApplication() {
-        let app = ApplicationModel(context: viewContext)
+        let app = Application(context: viewContext)
         app.id = 0
         app.token = "secret-token"
         app.image = "mascott"
@@ -32,8 +28,7 @@ struct ApplicationListView: View {
         let deletables = offsets.map{ apps[$0] }
 
         for deletable in deletables {
-            Task { await deletable.delete() }
-            viewContext.delete(deletable)
+            Task { await deletable.delete(context: viewContext) }
         }
 
         try? viewContext.save()
@@ -62,8 +57,7 @@ struct ApplicationListView: View {
                 }
             }
         }
-        .task { await refreshData() }
-        .refreshable { await refreshData() }
+        .refreshable { await Application.getAll(context: viewContext) }
     }
 }
 

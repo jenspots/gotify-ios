@@ -7,20 +7,6 @@
 
 import SwiftUI
 
-struct ClientDetailView: View {
-    @State var name: String
-    @State var token: String
-
-    var body: some View {
-        List {
-            Text(name)
-            SensitiveText(text: token)
-            Text("Delete")
-                .foregroundColor(.red)
-        }
-    }
-}
-
 struct ClientRowComponent: View {
     @State var name: String
     @State var token: String

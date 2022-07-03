@@ -9,23 +9,30 @@ import SwiftUI
 
 struct ServerDetailView: View {
     @State var url: String = "127.0.0.1"
+    
+    @FetchRequest
+    var users: FetchedResults<User>
+    
+    init() {
+        _users = FetchRequest<User>(
+            sortDescriptors: [NSSortDescriptor(keyPath: \User.name, ascending: false)],
+            animation: .default
+        )
+    }
 
     var body: some View {
         List {
             Section(header: Text("Configuration")) {
-                HStack {
-                    Text("URL")
-                    TextField("Server URL", text: $url)
-                        .multilineTextAlignment(.trailing)
+                NavigationLink(destination: {}) {
+                    KeyValueText(left: "URL", right: Server.shared.urlSansProtocol())
                 }
-                SensitiveText(text: "very-secret-token")
+                SensitiveText(left: "Token", right: Server.shared.token)
             }
             
             Section(header: Text("Users")) {
-                UserRowComponent(userName: "Greg", admin: true)
-                UserRowComponent(userName: "Jake", admin: false)
-                UserRowComponent(userName: "Duke", admin: true)
-
+                ForEach(users) { user in
+                    UserRowComponent(user: user)
+                }
             }
             Section(header: Text("Clients")) {
                 ClientRowComponent(name: "Safari", token: "secret-token")

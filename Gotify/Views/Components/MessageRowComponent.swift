@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MessageRowComponent: View {
-    var message: MessageModel
+    var message: Message
 
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {

@@ -35,7 +35,6 @@ struct SettingsView: View {
             List {
                 Section {
                     ServerRowComponent(server: .shared, connected: true)
-                    ServerRowComponent(server: .init(serverUrl: "gotify.com", token: "secret-token"), connected: false)
                 }
                 
                 Section(header: Text("General")) {

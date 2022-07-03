@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="ApplicationModel" representedClassName=".ApplicationModel" syncable="YES" codeGenerationType="category">
+    <entity name="Application" representedClassName=".Application" syncable="YES" codeGenerationType="category">
         <attribute name="about" attributeType="String"/>
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="image" attributeType="String"/>
@@ -17,7 +17,7 @@
         <attribute name="key" attributeType="String"/>
         <attribute name="value" attributeType="String"/>
     </entity>
-    <entity name="MessageModel" representedClassName=".MessageModel" syncable="YES" codeGenerationType="category">
+    <entity name="Message" representedClassName=".Message" syncable="YES" codeGenerationType="category">
         <attribute name="appid" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -30,9 +30,20 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="User" representedClassName=".User" syncable="YES" codeGenerationType="category">
+        <attribute name="admin" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
     <elements>
-        <element name="ApplicationModel" positionX="-11.8629150390625" positionY="60.33798217773438" width="128" height="119"/>
+        <element name="Application" positionX="-11.8629150390625" positionY="60.33798217773438" width="128" height="119"/>
         <element name="KeyValues" positionX="108" positionY="9" width="128" height="59"/>
-        <element name="MessageModel" positionX="245.8363647460938" positionY="9.43505859375" width="128" height="119"/>
+        <element name="Message" positionX="245.8363647460938" positionY="9.43505859375" width="128" height="119"/>
+        <element name="User" positionX="117" positionY="81" width="128" height="74"/>
     </elements>
 </model>

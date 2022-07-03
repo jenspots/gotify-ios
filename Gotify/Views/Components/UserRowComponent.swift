@@ -8,19 +8,11 @@
 import SwiftUI
 
 struct UserRowComponent: View {
-    @State var userName: String
-    @State var admin: Bool
+    var user: User
     
     var body: some View {
         NavigationLink(destination: {}) {
-            HStack {
-                Text(userName)
-                if admin {
-                    Spacer()
-                    Text("Admin")
-                        .foregroundColor(.gray)
-                }
-            }
+            KeyValueText(left: user.name!, right: user.admin ? "Admin" : "")
         }
     }
 }

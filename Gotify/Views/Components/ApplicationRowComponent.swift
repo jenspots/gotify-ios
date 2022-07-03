@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ApplicationRowComponent: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @ObservedObject var application: ApplicationModel
+    @ObservedObject var application: Application
 
     var body: some View {
         HStack(spacing: 15) {
