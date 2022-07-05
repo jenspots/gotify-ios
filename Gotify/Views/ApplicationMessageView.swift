@@ -62,10 +62,22 @@ struct ApplicationMessageView: View {
                     NavigationLink(destination: MessageDetailView(application: application, message: message)) {
                         MessageRowComponent(message: message)
                     }
-                }
-                .onDelete { indices in
-                    indices.forEach { index in
-                        Task { await messages[index].delete(context: context) }
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        Button { message.toggleRead() } label: {
+                            if !message.read {
+                                Label("Read", systemImage: "envelope.open")
+                            } else {
+                                Label("Unread", systemImage: "envelope.badge")
+                            }
+                        }
+                        .tint(.blue)
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            Task { await message.delete(context: context) }
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
                     }
                 }
             }

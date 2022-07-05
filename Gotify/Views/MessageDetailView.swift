@@ -50,6 +50,9 @@ struct MessageDetailView: View {
           maxHeight: .infinity,
           alignment: .topLeading
         )
+        .onAppear {
+            message.markAsRead()
+        }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: delete) {

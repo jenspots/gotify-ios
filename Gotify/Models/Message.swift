@@ -9,6 +9,7 @@
 import Alamofire
 import SwiftyJSON
 import CoreData
+import SwiftUI
 
 private class PaginatedMessages: Serializeable {
     
@@ -140,6 +141,29 @@ public class Message: NSManagedObject, Serializeable {
 
         DispatchQueue.main.async{ try? context.save() }
         return nil
+    }
+    
+    func markAsRead() {
+        read = true
+        try? PersistenceController.shared.container.viewContext.save()
+    }
+    
+    func markAsUnread() {
+        read = false
+        try? PersistenceController.shared.container.viewContext.save()
+    }
+    
+    func toggleRead() {
+        read.toggle()
+        try? PersistenceController.shared.container.viewContext.save()
+    }
+    
+    static func fetchUnreadCount(application: Application) -> FetchRequest<Message> {
+        return FetchRequest<Message>(
+            sortDescriptors: [],
+            predicate: NSPredicate(format: "appid == %d AND read == 0", application.id),
+            animation: .default
+        )
     }
     
 }

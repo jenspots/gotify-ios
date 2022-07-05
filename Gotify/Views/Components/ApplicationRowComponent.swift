@@ -8,16 +8,34 @@
 import SwiftUI
 
 struct ApplicationRowComponent: View {
-    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.managedObjectContext) private var context
     @ObservedObject var application: Application
 
+    @FetchRequest
+    var messages: FetchedResults<Message>
+    
+    init(application: Application) {
+        self.application = application
+        self._messages = Message.fetchUnreadCount(application: application)
+    }
+    
     var body: some View {
         HStack(spacing: 15) {
-            Image("mascott")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 40)
-                .mask(Circle())
+            ZStack {
+                Image("mascott")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 50)
+                    .mask(Circle())
+                Text("\(messages.count)")
+                    .font(.footnote)
+                    .padding(3)
+                    .foregroundColor(.white)
+                    .background(.red)
+                    .cornerRadius(500)
+                    .padding(.leading, 35)
+                    .padding(.top, -25)
+            }
             VStack(alignment: .leading) {
                 Text(application.name ?? "")
                     .font(.title3)

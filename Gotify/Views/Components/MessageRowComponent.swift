@@ -8,24 +8,36 @@
 import SwiftUI
 
 struct MessageRowComponent: View {
-    var message: Message
+    @ObservedObject var message: Message
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            if let title = message.title {
-                Text(title)
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .lineLimit(2)
+        HStack {
+            VStack {
+                Circle().frame(width: 10, height: 10)
+                    .foregroundColor(.blue)
+                    .opacity(message.read ? 0.0 : 1.0)
+                    .padding(.top, 5)
+                Spacer()
             }
 
-            Text(message.message!.trimmingCharacters(in: .whitespacesAndNewlines))
-                .lineLimit(3)
+            VStack(alignment: .leading, spacing: 5) {
+                    if let title = message.title {
+                        Text(title)
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                            .lineLimit(2)
+                    } else {
+                        Text("Notification")
+                    }
 
-            Text(message.date!.formatted(date: .numeric, time: .shortened))
-                .font(.subheadline)
-                .lineLimit(1)
-                .foregroundColor(.gray)
+                Text(message.message!.trimmingCharacters(in: .whitespacesAndNewlines))
+                    .lineLimit(3)
+
+                Text(message.date!.formatted(date: .numeric, time: .shortened))
+                    .font(.subheadline)
+                    .lineLimit(1)
+                    .foregroundColor(.gray)
+            }
         }
         .padding(.vertical, 5.0)
     }
