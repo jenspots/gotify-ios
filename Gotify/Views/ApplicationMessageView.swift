@@ -40,6 +40,7 @@ struct ApplicationMessageView: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 100)
                             .mask(Circle())
+                            .padding(.top, -10)
 
                         Text(application.name ?? "")
                             .font(.title3)
@@ -57,7 +58,7 @@ struct ApplicationMessageView: View {
             .foregroundColor(colorScheme == .dark ? .white : .black)
 
             Section(header: Text("Notifications")) {
-                ForEach(messages) { message in
+                ForEach(messages.filter { !$0.isDeleted }) { message in
                     NavigationLink(destination: MessageDetailView(application: application, message: message)) {
                         MessageRowComponent(message: message)
                     }

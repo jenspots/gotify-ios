@@ -11,6 +11,19 @@ struct ServerRowComponent: View {
     @State var server: Server
     @State var connected: Bool? = nil
     
+    let timer = Timer.publish(
+        every: 5,
+        on: .main,
+        in: .common
+    ).autoconnect()
+    
+    func checkHealth() {
+        Task {
+            let healthCheck = await Server.shared.healthCheck()
+            connected = healthCheck.health && healthCheck.database
+        }
+    }
+    
     var body: some View {
         NavigationLink(destination: ServerDetailView()) {
             HStack(alignment: .center, spacing: 15) {
@@ -36,12 +49,8 @@ struct ServerRowComponent: View {
             }
             .padding(.vertical, 5)
         }
-        .onAppear {
-            Task {
-                let healthCheck = await Server.shared.healthCheck()
-                connected = healthCheck.health && healthCheck.database
-            }
-        }
+        .onReceive(timer) { _ in checkHealth() }
+        .onAppear { checkHealth() }
     }
 }
 

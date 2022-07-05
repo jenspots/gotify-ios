@@ -37,6 +37,10 @@ private class PaginatedMessages: Serializeable {
 
 public class Message: NSManagedObject, Serializeable {
     
+    static func new() -> Message {
+        return Message(entity: entity(), insertInto: nil)
+    }
+    
     // Required for the fromJSON function.
     static let dateFormatter: DateFormatter = {
         let result = DateFormatter()
@@ -47,7 +51,7 @@ public class Message: NSManagedObject, Serializeable {
 
     // Serializable
     static func fromJSON(json: JSON) -> Self {
-        let result = Message(context: PersistenceController.shared.container.viewContext)
+        let result = Message.new()
         result.id = json["id"].int64!
         result.appid = json["appid"].int64!
         result.date = Message.dateFormatter.date(from: json["date"].string!)!
@@ -67,36 +71,32 @@ public class Message: NSManagedObject, Serializeable {
     }
 
     func delete(context: NSManagedObjectContext) async -> GotifyError? {
-        // The object will be removed, so we need to keep a copy of the id
-        let id = self.id
-        
-        // Remove the object in the background
-        DispatchQueue.main.async {
-            context.delete(self)
-            try? context.save()
+        do {
+            try self.validateForDelete()
+        } catch {
+            print(error.localizedDescription)
+            return nil
         }
 
+        context.delete(self)
+        
         // Make the request
-        let (status, _): (Int, Message?) = await API.request(
+        let (status, _): (Int, Nil?) = await API.request(
             slug: "/message/\(id)",
             body: nil,
             method: .delete
         )
         
-        if status != 200 {
-            // TODO: notify of error and restore object
+        if status == 200 {
+            DispatchQueue.main.async {
+                do {
+                    try context.save()
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
         }
 
-        return nil
-    }
-    
-    func put(context: NSManagedObjectContext) async -> GotifyError? {
-        let (_, _): (Int, Message?) = await API.request(
-            slug: "/message/\(id)",
-            body: self,
-            method: .put
-        )
-        DispatchQueue.main.async{ try? context.save() }
         return nil
     }
     
@@ -109,11 +109,35 @@ public class Message: NSManagedObject, Serializeable {
             slug = "message/"
         }
 
-        let (_, _): (Int, PaginatedMessages?) = await API.request(
+        let (_, paginatedMessages): (Int, PaginatedMessages?) = await API.request(
             slug: slug,
             body: nil,
             method: .get
         )
+        
+        if let messages = paginatedMessages?.messages {
+            for message in messages {
+                do {
+                    let request = Message.fetchRequest()
+                    request.predicate = NSPredicate(format: "id == %d", message.id)
+                    let queryResult = try context.fetch(request)
+                    
+                    if queryResult.count > 2 {
+                        fatalError("Core Data Error: uniqueness constrained broken")
+                    }
+                    
+                    // Note: messages cant be updated, so we just check if it exists locally.
+                    if queryResult.first == nil {
+                        context.insert(message)
+                    }
+                                        
+                    DispatchQueue.main.async { try? context.save() }
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+
         DispatchQueue.main.async{ try? context.save() }
         return nil
     }

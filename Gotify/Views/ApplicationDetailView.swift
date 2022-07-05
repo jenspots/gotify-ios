@@ -36,7 +36,7 @@ Notifications are disabled globally and need to be enabled before changing appli
             }
 
             Section(header: Text("Danger Zone")) {
-                SensitiveText(left: "Token", right: application.token!)
+                SensitiveText(left: "Token", right: application.token ?? "Unknown")
                 Text("Delete Application")
                     .foregroundColor(.red)
                     .onTapGesture {

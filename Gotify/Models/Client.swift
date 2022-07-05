@@ -18,7 +18,7 @@ public class Client: NSManagedObject, Serializeable {
     }
         
     static func new() -> Client {
-        return Client(context: PersistenceController.shared.container.viewContext)
+        return Client(entity: entity(), insertInto: nil)
     }
     
     // Serializeable
@@ -30,7 +30,7 @@ public class Client: NSManagedObject, Serializeable {
     
     // Serializeable
     static func fromJSON(json: JSON) -> Self {
-        let result = Client(context: PersistenceController.shared.container.viewContext)
+        let result = Client.new()
         result.id = json["id"].int64!
         result.name = json["name"].string!
         result.token = json["token"].string!
@@ -39,12 +39,36 @@ public class Client: NSManagedObject, Serializeable {
 
     /* Retrieve clients from the server. */
     static func getAll(context: NSManagedObjectContext) async -> GotifyError? {
-        let (_, _): (Int, [Client]?) = await API.request(
+        let (_, clients): (Int, [Client]?) = await API.request(
             slug: "/client",
             body: nil,
             method: .get
         )
-        DispatchQueue.main.async{ try? context.save() }
+        
+        if let clients = clients {
+            for client in clients {
+                do {
+                    let request = Client.fetchRequest()
+                    request.predicate = NSPredicate(format: "id == %d", client.id)
+                    let queryResult = try context.fetch(request)
+                    
+                    if queryResult.count > 2 {
+                        fatalError("Core Data Error: uniqueness constrained broken")
+                    }
+                    
+                    if let queryResult = queryResult.first {
+                        queryResult.name = client.name
+                    } else {
+                        context.insert(client)
+                    }
+                    
+                    DispatchQueue.main.async { try? context.save() }
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+        
         return nil
     }
     
@@ -81,9 +105,7 @@ public class Client: NSManagedObject, Serializeable {
         )
         
         if let client = client {
-            self.id = client.id
-            self.token = client.token
-            context.delete(client)
+            context.insert(client)
             DispatchQueue.main.async { try? context.save() }
         } else {
             // IN ERROR

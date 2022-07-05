@@ -24,6 +24,9 @@ struct ServerDetailView: View {
     var url: String = "127.0.0.1"
     
     @State
+    var token: String = "secret-token"
+    
+    @State
     var newClient: Bool = false
     
     @State
@@ -42,7 +45,8 @@ struct ServerDetailView: View {
     var genericToggle1: Bool = false
 
     var urlDescription: String = "To guarantee a secure connection, HTTPS is required. Both IP addresses and domain names are accepted."
-    
+    var tokenDescription: String = "This application requires a client token to communicate with the server."
+
     init() {
         _users = User.fetchAll()
         _clients = Client.fetchAll()
@@ -55,7 +59,7 @@ struct ServerDetailView: View {
                 NavigationLink(destination: TextModify(fieldName: "URL", value: $url, description: urlDescription)) {
                     KeyValueText(left: "URL", right: Server.shared.urlSansProtocol())
                 }
-                NavigationLink(destination: {}) {
+                NavigationLink(destination: TextModify(fieldName: "Token", value: $token, description: tokenDescription)) {
                     SensitiveText(left: "Token", right: Server.shared.token)
                 }
             }

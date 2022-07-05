@@ -19,7 +19,7 @@ public final class Application: NSManagedObject, Serializeable {
     }
     
     static func new() -> Application {
-        return Application(context: PersistenceController.shared.container.viewContext)
+        return Application(entity: entity(), insertInto: nil)
     }
     
     var nameValue: String {
@@ -73,12 +73,37 @@ public final class Application: NSManagedObject, Serializeable {
 
     /* Retrieve new Applications from the server. */
     static func getAll(context: NSManagedObjectContext) async -> GotifyError? {
-        let (_, _): (Int, [Application]?) = await API.request(
+        let (_, applications): (Int, [Application]?) = await API.request(
             slug: "/application",
             body: nil,
             method: .get
         )
-        DispatchQueue.main.async{ try? context.save() }
+        
+        if let applications = applications {
+            for application in applications {
+                do {
+                    let request = Application.fetchRequest()
+                    request.predicate = NSPredicate(format: "id == %d", application.id)
+                    let queryResult = try context.fetch(request)
+                    
+                    if queryResult.count > 2 {
+                        fatalError("Core Data Error: uniqueness constrained broken")
+                    }
+                    
+                    if let queryResult = queryResult.first {
+                        queryResult.name = application.name
+                        queryResult.about = application.about
+                    } else {
+                        context.insert(application)
+                    }
+                    
+                    DispatchQueue.main.async { try? context.save() }
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+        
         return nil
     }
     
@@ -90,10 +115,7 @@ public final class Application: NSManagedObject, Serializeable {
         )
         
         if let application = application {
-            self.id = application.id
-            self.token = application.token
-            self.image = application.image
-            context.delete(application)
+            context.insert(application)
             DispatchQueue.main.async { try? context.save() }
         } else {
             // IN ERROR
@@ -101,7 +123,6 @@ public final class Application: NSManagedObject, Serializeable {
         
         return nil
     }
-
     
     static func fetchAll() -> FetchRequest<Application> {
         return FetchRequest<Application>(
