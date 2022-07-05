@@ -9,26 +9,38 @@ import SwiftUI
 
 struct ServerRowComponent: View {
     @State var server: Server
-    @State var connected: Bool
+    @State var connected: Bool? = nil
     
     var body: some View {
         NavigationLink(destination: ServerDetailView()) {
             HStack(alignment: .center, spacing: 15) {
-                Image(systemName: "globe")
+                Image(systemName: "globe.europe.africa.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 40)
-                    .foregroundColor(connected ? .green : .red)
+                    .foregroundColor(connected != nil ? (connected! ? .green : .red) : .gray)
                     .saturation(0.75)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(Server.shared.urlSansProtocol())
                         .fontWeight(.medium)
-                    Text(connected ? "Connected" : "Unreachable")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
+                    if let connected = connected {
+                        Text(connected ? "Connected" : "Unreachable")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                    } else {
+                        Text("Unknown")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                    }
                 }
             }
             .padding(.vertical, 5)
+        }
+        .onAppear {
+            Task {
+                let healthCheck = await Server.shared.healthCheck()
+                connected = healthCheck.health && healthCheck.database
+            }
         }
     }
 }

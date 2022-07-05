@@ -38,7 +38,7 @@ struct ApplicationListView: View {
         NavigationView {
             List {
                 ForEach(apps) { application in
-                    NavigationLink(destination: ApplicationDetailView(application: application)) {
+                    NavigationLink(destination: ApplicationMessageView(application: application)) {
                         ApplicationRowComponent(application: application)
                     }
                 }
@@ -50,10 +50,6 @@ struct ApplicationListView: View {
                     Button(action: newApplication) {
                         Label("New Application", systemImage: "plus")
                     }
-                }
-
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
                 }
             }
         }

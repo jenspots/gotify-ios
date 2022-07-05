@@ -10,8 +10,9 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @State var allNotifications: Bool = true
     @State var serverUrl: String = ""
+    
+    @AppStorage("notificationsActiveGlobal") var notificationsActiveGlobal: Bool = true
 
     private var values: [String: String] {
         let request: NSFetchRequest<KeyValues> = KeyValues.fetchRequest()
@@ -29,16 +30,21 @@ struct SettingsView: View {
     }
 
     @State var newtoken: String = ""
+    
+    var footerText: String =
+"""
+Disable this setting to receive no notifications whatsoever. This overrides application specific settings until turned off.
+"""
 
     var body: some View {
         NavigationView {
             List {
                 Section {
-                    ServerRowComponent(server: .shared, connected: true)
+                    ServerRowComponent(server: .shared)
                 }
                 
-                Section(header: Text("General")) {
-                    Toggle(isOn: $allNotifications) {
+                Section(header: Text("General"), footer: Text(footerText)) {
+                    Toggle(isOn: $notificationsActiveGlobal) {
                         Text("All Notifications")
                     }
                 }
@@ -57,7 +63,15 @@ struct SettingsView: View {
                     }
                 }
 
-                Section(header: Text("About")) {
+                Section(header: Text("About"), footer: HStack() {
+                    Spacer()
+                    VStack(spacing: 5) {
+                        Text("Version 1.0.0")
+                        Text("Build ae9512b6")
+                    }
+                    .padding(.top, 10)
+                    Spacer()
+                }) {
                     NavigationLink(destination: {}) {
                         Text("Developer")
                     }

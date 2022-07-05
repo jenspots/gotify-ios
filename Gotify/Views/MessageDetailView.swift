@@ -32,15 +32,9 @@ struct MessageDetailView: View {
 
     var body: some View {
         List {
-            ZStack {
-                TextEditor(text: $title)
-                    .font(.title.bold())
-                    .background(.ultraThickMaterial)
-                Text(title)
-                    .font(.title.bold())
-                    .opacity(0.0)
-            }
-            .listRowSeparator(.hidden)
+            Text(title)
+                .font(.title.bold())
+                .listRowSeparator(.hidden)
             Text(message.date?.formatted(date: .numeric, time: .shortened) ?? "")
                 .font(.subheadline)
                 .fontWeight(.regular)
@@ -56,16 +50,12 @@ struct MessageDetailView: View {
           maxHeight: .infinity,
           alignment: .topLeading
         )
-        .background(.clear)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: delete) {
                     Label("Delete", systemImage: "trash")
                 }
             }
-        }
-        .onDisappear {
-            
         }
     }
 }

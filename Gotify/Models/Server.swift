@@ -6,17 +6,33 @@
 //
 
 import Foundation
-import Alamofire
+import SwiftyJSON
+
+struct HealthCheck: Serializeable {
+    let database: Bool
+    let health: Bool
+    
+    // Serializable
+    func toJSON() -> JSON {
+        fatalError("Not implemented")
+    }
+    
+    // Serializable
+    static func fromJSON(json: JSON) -> Self {
+        let database = json["database"].string!
+        let health = json["health"].string!
+        return HealthCheck(database: database == "green", health: health == "green")
+    }
+
+}
 
 struct Server {
     var serverUrl: String
     var token: String
-    var headers: HTTPHeaders
     
     init(serverUrl: String, token: String) {
         self.serverUrl = serverUrl
         self.token = token
-        self.headers = [.init(name: "X-Gotify-Key", value: token)]
     }
 
     static var shared = Server(serverUrl: "https://notifications.jenspots.com", token: "CsgdEX0D2p2HRbJ")
@@ -29,6 +45,21 @@ struct Server {
         } else {
             return serverUrl // TODO: should probably be illegal
         }
+    }
+    
+    func healthCheck() async -> HealthCheck {
+        let (_, healthCheck): (Int, HealthCheck?) = await API.request(
+            slug: "/health",
+            body: nil,
+            method: .get
+        )
+        
+        if let healthCheck = healthCheck {
+            return healthCheck
+        } else {
+            return HealthCheck(database: false, health: false)
+        }
+        
     }
 
 }

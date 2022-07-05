@@ -8,8 +8,29 @@
 import SwiftUI
 
 struct KeyValueText: View {
-    @State var left: String
-    @State var right: String
+    @Binding var left: String
+    @Binding var right: String
+    
+    init(left: Binding<String>, right: Binding<String>) {
+        self._left = left
+        self._right = right
+    }
+    
+    init(left: String, right: String) {
+        self._left = Binding(get: { left }, set: { _ in fatalError("Not a binding") })
+        self._right = Binding(get: { right }, set: { _ in fatalError("Not a binding") })
+    }
+    
+    init(left: String, right: Binding<String>) {
+        self._left = Binding(get: { left }, set: { _ in fatalError("Not a binding") })
+        self._right = right
+    }
+    
+    init(left: Binding<String>, right: String) {
+        self._left = left
+        self._right = Binding(get: { right }, set: { _ in fatalError("Not a binding") })
+    }
+
     
     var body: some View {
         HStack {

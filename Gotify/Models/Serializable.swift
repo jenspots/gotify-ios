@@ -7,7 +7,9 @@
 
 import SwiftyJSON
 
-protocol Serializeable {    
+protocol Serializeable {
+    
+    
     // Convert an instance to JSON
     func toJSON() -> JSON
     
@@ -15,6 +17,15 @@ protocol Serializeable {
     static func fromJSON(json: JSON) -> Self
 }
 
+struct Nil: Serializeable {
+    func toJSON() -> JSON {
+        return JSON()
+    }
+    
+    static func fromJSON(json: JSON) -> Self {
+        return Nil()
+    }
+}
 
 extension Array: Serializeable where Iterator.Element: Serializeable {
     func toJSON() -> JSON {

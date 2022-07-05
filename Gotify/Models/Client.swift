@@ -1,16 +1,15 @@
 //
-//  User+CoreDataClass.swift
+//  Client.swift
 //  Gotify
 //
-//  Created by Jens Pots on 03/07/2022.
-//
+//  Created by Jens Pots on 05/07/2022.
 //
 
 import Foundation
 import SwiftyJSON
 import CoreData
 
-public class User: NSManagedObject, Serializeable {
+public class Client: NSManagedObject, Serializeable {
     
     var nameValue: String {
         get { return self.name! }
@@ -20,24 +19,23 @@ public class User: NSManagedObject, Serializeable {
     // Serializeable
     func toJSON() -> JSON {
         return JSON([
-            "admin": self.admin,
             "name": self.name!
         ])
     }
     
     // Serializeable
     static func fromJSON(json: JSON) -> Self {
-        let result = User(context: PersistenceController.shared.container.viewContext)
+        let result = Client(context: PersistenceController.shared.container.viewContext)
         result.id = json["id"].int64!
-        result.admin = json["admin"].bool ?? false
         result.name = json["name"].string!
+        result.token = json["token"].string!
         return result as! Self
     }
 
-    /* Retrieve new users from the server. */
+    /* Retrieve clients from the server. */
     static func getAll(context: NSManagedObjectContext) async -> GotifyError? {
-        let (_, _): (Int, [User]?) = await API.request(
-            slug: "/user",
+        let (_, _): (Int, [Client]?) = await API.request(
+            slug: "/client",
             body: nil,
             method: .get
         )
@@ -45,21 +43,21 @@ public class User: NSManagedObject, Serializeable {
         return nil
     }
     
-    // Push edited user to the server
+    // Push edited client to the server
     func put(context: NSManagedObjectContext) async -> GotifyError? {
-        let (_, _): (Int, User?) = await API.request(
-            slug: "/user/\(self.id)",
+        let (_, _): (Int, Client?) = await API.request(
+            slug: "/client/\(self.id)",
             body: self,
-            method: .post
+            method: .put
         )
         DispatchQueue.main.async{ try? context.save() }
         return nil
     }
-    
+
     // Delete client
     func delete(context: NSManagedObjectContext) async -> GotifyError? {
         let (_, _): (Int, Nil?) = await API.request(
-            slug: "/user/\(self.id)",
+            slug: "/client/\(self.id)",
             body: nil,
             method: .delete
         )
@@ -69,4 +67,5 @@ public class User: NSManagedObject, Serializeable {
 
         return nil
     }
+
 }

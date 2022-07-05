@@ -17,6 +17,11 @@ public final class Application: NSManagedObject, Serializeable {
         get { return "/application/\(id)" }
     }
     
+    var nameValue: String {
+        get { return self.name! }
+        set { self.name = newValue }
+    }
+    
     // Serializable
     static func fromJSON(json: JSON) -> Self {
         let result = Application(context: PersistenceController.shared.container.viewContext)
@@ -39,29 +44,18 @@ public final class Application: NSManagedObject, Serializeable {
     
     // Delete an application form the server, then from memory.
     func delete(context: NSManagedObjectContext) async -> GotifyError? {
-        // The object will be removed, so we need to keep a copy of the id
-        let id = self.id
-        
-        // Remove the object in the background
-        DispatchQueue.main.async {
-            context.delete(self)
-            try? context.save()
-        }
-
-        // Make the request
-        let (status, _): (Int, Application?) = await API.request(
-            slug: "/application/\(id)",
+        let (_, _): (Int, Nil?) = await API.request(
+            slug: "/application/\(self.id)",
             body: nil,
             method: .delete
         )
         
-        if status != 200 {
-            // TODO: notify of error and restore object
-        }
+        context.delete(self)
+        DispatchQueue.main.async { try? context.save() }
 
         return nil
     }
-    
+
     func put(context: NSManagedObjectContext) async -> GotifyError? {
         let (_, _): (Int, Application?) = await API.request(
             slug: "/application/\(id)",

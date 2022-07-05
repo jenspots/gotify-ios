@@ -9,42 +9,33 @@ import SwiftUI
 
 struct ClientDetailView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.managedObjectContext) private var context
 
-    @State var name: String
-    @State var token: String
-    
-    @State var alert: Bool = false
+    @State var client: Client
 
     var body: some View {
         List {
             Section(header: Text("Details")) {
-                NavigationLink(destination: {}) {
-                    KeyValueText(left: "Name", right: "Safari")
+                NavigationLink(destination: TextModify(fieldName: "Name", value: $client.nameValue)) {
+                    KeyValueText(left: "Name", right: $client.nameValue)
                 }
-                SensitiveText(left: "Token", right: token)
-                    .onTapGesture {
-                        alert.toggle()
-                    }
+            }
+
+            Section(header: Text("Danger Zone")) {
+                SensitiveText(left: "Token", right: client.token!)
                 Text("Delete Client")
                     .foregroundColor(.red)
                     .onTapGesture {
-                        // TODO: DELETE REQUEST
+                        Task { await client.delete(context: context) } 
                         dismiss()
                     }
             }
-            .alert("Tokens cannot be changed.", isPresented: $alert) {
-                Button("OK", role: .cancel) { }
-            }
         }
-    }
-}
-
-
-
-struct ClientDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            ClientDetailView(name: "Safari", token: "very-secret-token")
+        .navigationTitle(client.nameValue)
+        .navigationBarTitleDisplayMode(.inline)
+        .onDisappear {
+            Task { await client.put(context: context) }
+            // TODO: PUT REQUEST
         }
     }
 }
