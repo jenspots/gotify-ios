@@ -8,6 +8,7 @@
 import Foundation
 import SwiftyJSON
 import CoreData
+import SwiftUI
 
 public class Client: NSManagedObject, Serializeable {
     
@@ -16,6 +17,10 @@ public class Client: NSManagedObject, Serializeable {
         set { self.name = newValue }
     }
         
+    static func new() -> Client {
+        return Client(context: PersistenceController.shared.container.viewContext)
+    }
+    
     // Serializeable
     func toJSON() -> JSON {
         return JSON([
@@ -66,6 +71,32 @@ public class Client: NSManagedObject, Serializeable {
         DispatchQueue.main.async { try? context.save() }
 
         return nil
+    }
+    
+    func create(context: NSManagedObjectContext) async -> GotifyError? {
+        let (_, client): (Int, Client?) = await API.request(
+            slug: "/client",
+            body: self,
+            method: .post
+        )
+        
+        if let client = client {
+            self.id = client.id
+            self.token = client.token
+            context.delete(client)
+            DispatchQueue.main.async { try? context.save() }
+        } else {
+            // IN ERROR
+        }
+        
+        return nil
+    }
+    
+    static func fetchAll() -> FetchRequest<Client>{
+        return FetchRequest<Client>(
+            sortDescriptors: [NSSortDescriptor(keyPath: \Client.name, ascending: true)],
+            animation: .default
+        )
     }
 
 }

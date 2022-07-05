@@ -10,51 +10,24 @@ import PhotosUI
 import SwiftUI
 
 struct ApplicationMessageView: View {
-    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.managedObjectContext) private var context
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
     
-    @State var title: String
-    @State var about: String
+    @State var application: Application
 
     @FetchRequest
     var messages: FetchedResults<Message>
     
     init(application: Application) {
-        self.application = application
+        self._application = State(wrappedValue: application)
         
         _messages = FetchRequest<Message>(
             sortDescriptors: [NSSortDescriptor(keyPath: \Message.date, ascending: false)],
             predicate: NSPredicate(format: "appid == %d", application.id),
             animation: .default
         )
-        
-        _title = State(initialValue: application.name!)
-        _about = State(initialValue: application.about!)
     }
-
-
-    @ObservedObject var application: Application
-
-    @State var active: Bool = true
-    @State var presentConfig: Bool = false
-    
-    func refresh() async {
-        await Message.getAll(context: viewContext, application: application)
-    }
-    
-    func delete(offsets: IndexSet) {
-        for deletable in offsets.map({ messages[$0] }) {
-            Task { await deletable.delete(context: viewContext) }
-        }
-    }
-
-    func deleteApp() {
-        Task { await application.delete(context: viewContext) }
-        dismiss()
-    }
-    
-    @State var settingsPopover: Bool = false
         
     var body: some View {
         List {
@@ -89,31 +62,14 @@ struct ApplicationMessageView: View {
                         MessageRowComponent(message: message)
                     }
                 }
-                .onDelete(perform: delete)
+                .onDelete { indices in
+                    indices.forEach { index in
+                        Task { await messages[index].delete(context: context) }
+                    }
+                }
             }
         }
-        .refreshable {
-            await refresh()
-        }
-        .navigationBarItems(trailing: NavigationLink(destination: ApplicationDetailView(application: application)) {
-            Text("Edit")
-        })
-//        .background {
-//            NavigationLink(
-//                destination: ApplicationDetailView(application: application),
-//                isActive: $presentConfig
-//            ) {
-//                EmptyView()
-//            }
-//            .hidden()
-//        }
-//        .toolbar(content: {
-//            ToolbarItem {
-//                Button(action: { presentConfig.toggle() }) {
-//                    Label("Edit", systemImage: "gear")
-//                }
-//            }
-//        })
+        .refreshable { await Message.getAll(context: context, application: application) }
         .listStyle(GroupedListStyle())
         .navigationBarTitle(application.name ?? "")
         .navigationBarTitleDisplayMode(.inline)

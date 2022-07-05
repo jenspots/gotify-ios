@@ -57,6 +57,7 @@ struct MessageDetailView: View {
                 }
             }
         }
+        .refreshable(action: {})
     }
 }
 

@@ -12,17 +12,6 @@ struct ApplicationListView: View {
 
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Application.name, ascending: true)], animation: .default)
     var apps: FetchedResults<Application>
-
-    func newApplication() {
-        let app = Application(context: viewContext)
-        app.id = 0
-        app.token = "secret-token"
-        app.image = "mascott"
-        app.name = "My Application"
-        app.about = "This is a dummy value"
-
-        try? viewContext.save()
-    }
     
     private func delete(offsets: IndexSet) {
         let deletables = offsets.map{ apps[$0] }
@@ -45,13 +34,6 @@ struct ApplicationListView: View {
                 .onDelete(perform: delete)
             }
             .navigationTitle("Applications")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: newApplication) {
-                        Label("New Application", systemImage: "plus")
-                    }
-                }
-            }
         }
         .refreshable { await Application.getAll(context: viewContext) }
     }

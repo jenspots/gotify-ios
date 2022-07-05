@@ -33,9 +33,6 @@ struct ClientDetailView: View {
         }
         .navigationTitle(client.nameValue)
         .navigationBarTitleDisplayMode(.inline)
-        .onDisappear {
-            Task { await client.put(context: context) }
-            // TODO: PUT REQUEST
-        }
+        .onDisappear { Task { await client.put(context: context) } }
     }
 }

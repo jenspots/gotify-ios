@@ -10,11 +10,16 @@ import Alamofire
 import CoreData
 import SwiftyJSON
 import Foundation
+import SwiftUI
 
 public final class Application: NSManagedObject, Serializeable {
     
     var slug: String {
         get { return "/application/\(id)" }
+    }
+    
+    static func new() -> Application {
+        return Application(context: PersistenceController.shared.container.viewContext)
     }
     
     var nameValue: String {
@@ -24,7 +29,7 @@ public final class Application: NSManagedObject, Serializeable {
     
     // Serializable
     static func fromJSON(json: JSON) -> Self {
-        let result = Application(context: PersistenceController.shared.container.viewContext)
+        let result = Application.new()
         result.id = json["id"].int64!
         result.token = json["token"].string
         result.name = json["name"].string
@@ -75,5 +80,33 @@ public final class Application: NSManagedObject, Serializeable {
         )
         DispatchQueue.main.async{ try? context.save() }
         return nil
+    }
+    
+    func create(context: NSManagedObjectContext) async -> GotifyError? {
+        let (_, application): (Int, Application?) = await API.request(
+            slug: "/application",
+            body: self,
+            method: .post
+        )
+        
+        if let application = application {
+            self.id = application.id
+            self.token = application.token
+            self.image = application.image
+            context.delete(application)
+            DispatchQueue.main.async { try? context.save() }
+        } else {
+            // IN ERROR
+        }
+        
+        return nil
+    }
+
+    
+    static func fetchAll() -> FetchRequest<Application> {
+        return FetchRequest<Application>(
+            sortDescriptors: [NSSortDescriptor(keyPath: \Application.name, ascending: true)],
+            animation: .default
+        )
     }
 }

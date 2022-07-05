@@ -11,9 +11,15 @@ struct ApplicationDetailView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) private var context
 
-    @State var application: Application
+    @ObservedObject var application: Application
     @AppStorage("notificationsActiveGlobal") var notificationsActiveGlobal: Bool = true
-
+    @State var newName: String
+    
+    init(application: Application) {
+        self.application = application
+        self._newName = State(initialValue: String(application.nameValue))
+    }
+    
     var disabledDescription: String =
 """
 Notifications are disabled globally and need to be enabled before changing application specific behavior.
@@ -22,8 +28,8 @@ Notifications are disabled globally and need to be enabled before changing appli
     var body: some View {
         List {
             Section(header: Text("Details"), footer: Text(notificationsActiveGlobal ? "" : disabledDescription)) {
-                NavigationLink(destination: TextModify(fieldName: "Name", value: $application.nameValue)) {
-                    KeyValueText(left: "Name", right: $application.nameValue)
+                NavigationLink(destination: TextModify(fieldName: "Name", value: $newName)) {
+                    KeyValueText(left: "Name", right: $newName)
                 }
                 Toggle("Notifications", isOn: $application.notifyUser)
                     .disabled(!notificationsActiveGlobal)
@@ -43,6 +49,7 @@ Notifications are disabled globally and need to be enabled before changing appli
         .navigationTitle(application.nameValue)
         .navigationBarTitleDisplayMode(.inline)
         .onDisappear {
+            application.name = newName
             Task { await application.put(context: context) }
             // TODO: PUT REQUEST
         }

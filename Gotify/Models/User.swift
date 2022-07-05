@@ -9,20 +9,33 @@
 import Foundation
 import SwiftyJSON
 import CoreData
+import SwiftUI
 
 public class User: NSManagedObject, Serializeable {
     
+    var password: String? = nil
+
     var nameValue: String {
         get { return self.name! }
         set { self.name = newValue }
     }
+    
+    static func new() -> User {
+        return User(context: PersistenceController.shared.container.viewContext)
+    }
         
     // Serializeable
     func toJSON() -> JSON {
-        return JSON([
+        var result = JSON([
             "admin": self.admin,
             "name": self.name!
         ])
+        
+        if let password = password {
+            result["pass"] = JSON(stringLiteral: password)
+        }
+        
+        return result
     }
     
     // Serializeable
@@ -69,4 +82,30 @@ public class User: NSManagedObject, Serializeable {
 
         return nil
     }
+    
+    static func fetchAll() -> FetchRequest<User> {
+        return FetchRequest<User>(
+            sortDescriptors: [NSSortDescriptor(keyPath: \User.name, ascending: true)],
+            animation: .default
+        )
+    }
+    
+    func create(context: NSManagedObjectContext) async -> GotifyError? {
+        let (_, user): (Int, User?) = await API.request(
+            slug: "/user",
+            body: self,
+            method: .post
+        )
+        
+        if let user = user {
+            self.id = user.id
+            context.delete(user)
+            DispatchQueue.main.async { try? context.save() }
+        } else {
+            // IN ERROR
+        }
+        
+        return nil
+    }
+
 }
