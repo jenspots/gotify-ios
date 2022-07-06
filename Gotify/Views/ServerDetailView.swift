@@ -118,7 +118,6 @@ struct ServerDetailView: View {
                 .foregroundColor(.gray)
 
             }
-
         }
         .navigationTitle(Server.shared.urlSansProtocol())
         .navigationBarTitleDisplayMode(.inline)
@@ -126,147 +125,15 @@ struct ServerDetailView: View {
             Task { await User.getAll(context: PersistenceController.shared.container.viewContext) }
             Task { await Client.getAll(context: PersistenceController.shared.container.viewContext) }
         }
-        .sheet(isPresented: $newClient, onDismiss: {
-            genericString1 = ""
-        }) {
-            NavigationView() {
-                List {
-                    Section(header: Text("Client Name")) {
-                        TextField("Client Name", text: $genericString1)
-                    }
-                                        
-                    Section(footer: Button(action: {
-                        let client = Client.new()
-                        client.name = genericString1
-                        Task { await client.create(context: context) }
-                        newClient.toggle()
-                    }) {
-                            Text("Create Client")
-                        }
-                        .font(.headline.weight(.medium))
-                        .tint(.blue)
-                        .buttonStyle(.borderedProminent)
-                        .buttonBorderShape(.capsule)
-                        .controlSize(.large)
-                        .frame(width: 500)
-                        
-                    ) { EmptyView() }
-                }
-                .navigationBarTitle("New Client")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            genericString1 = ""
-                            genericString2 = ""
-                            newClient = false
-                        }) {
-                            Text("Cancel")
-                        }
-                    }
-                }
-            }
+        .sheet(isPresented: $newClient) {
+            ClientNewView(isPresented: $newClient)
         }
-        .sheet(isPresented: $newUser, onDismiss: {
-            genericString1 = ""
-            genericString2 = ""
-            genericToggle1 = false
-        }) {
-            NavigationView() {
-                List {
-                    Section(header: Text("Username")) {
-                        TextField("Username", text: $genericString1)
-                    }
-                    
-                    Section(header: Text("Password")) {
-                        TextField("Password", text: $genericString2)
-                    }
-                    
-                    Section(header: Text("Privileges")) {
-                        Toggle(isOn: $genericToggle1) { Text("Administrator") }
-                    }
-                    
-                    Section(footer: Button(action: {
-                        let user = User.new()
-                        user.name = genericString1
-                        user.password = genericString2
-                        Task { await user.create(context: context) }
-                        newUser.toggle()
-                    }) {
-                            Text("Create User")
-                        }
-                        .font(.headline.weight(.medium))
-                        .tint(.blue)
-                        .buttonStyle(.borderedProminent)
-                        .buttonBorderShape(.capsule)
-                        .controlSize(.large)
-                        .frame(width: 500)
-                        
-                    ) { EmptyView() }
-                }
-                .navigationBarTitle("New User")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            genericString1 = ""
-                            genericString2 = ""
-                            newUser = false
-                        }) {
-                            Text("Cancel")
-                        }
-                    }
-                }
-            }
+        .sheet(isPresented: $newUser) {
+            UserNewView(isPresented: $newUser)
         }
-        .sheet(isPresented: $newApplication, onDismiss: {
-            genericString1 = ""
-            genericString2 = ""
-        }) {
-            NavigationView() {
-                List {
-                    Section(header: Text("Name")) {
-                        TextField("Application", text: $genericString1)
-                    }
-                    
-                    Section(header: Text("Description")) {
-                        TextField("Description", text: $genericString2)
-                    }
-                    
-                    Section(footer: Button(action: {
-                        let application = Application.new()
-                        application.name = genericString1
-                        application.about = genericString2
-                        Task { await application.create(context: context) }
-                        newApplication.toggle()
-                    }) {
-                            Text("Create Application")
-                        }
-                        .font(.headline.weight(.medium))
-                        .tint(.blue)
-                        .buttonStyle(.borderedProminent)
-                        .buttonBorderShape(.capsule)
-                        .controlSize(.large)
-                        .frame(width: 500)
-                        
-                    ) { EmptyView() }
-                }
-                .navigationBarTitle("New Application")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            genericString1 = ""
-                            genericString2 = ""
-                            newApplication = false
-                        }) {
-                            Text("Cancel")
-                        }
-                    }
-                }
-            }
+        .sheet(isPresented: $newApplication) {
+            ApplicationNewView(isPresented: $newApplication)
         }
-
     }
 }
 

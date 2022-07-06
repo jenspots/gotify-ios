@@ -8,19 +8,13 @@
 import SwiftUI
 
 struct ApplicationListView: View {
+
     @Environment(\.managedObjectContext) private var viewContext
+    @FetchRequest var apps: FetchedResults<Application>
+    @State var newApplication: Bool = false
 
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Application.name, ascending: true)], animation: .default)
-    var apps: FetchedResults<Application>
-    
-    private func delete(offsets: IndexSet) {
-        let deletables = offsets.map{ apps[$0] }
-
-        for deletable in deletables {
-            Task { await deletable.delete(context: viewContext) }
-        }
-
-        try? viewContext.save()
+    init() {
+        self._apps = Application.fetchAll()
     }
 
     var body: some View {
@@ -31,11 +25,25 @@ struct ApplicationListView: View {
                         ApplicationRowComponent(application: application)
                     }
                 }
-                .onDelete(perform: delete)
+                .onDelete { indices in
+                    indices.forEach { index in
+                        Task { await apps[index].delete(context: viewContext) }
+                    }
+                }
             }
             .navigationTitle("Applications")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: { newApplication = true }) {
+                        Label("New", systemImage: "plus")
+                    }
+                }
+            }
         }
         .refreshable { await Application.getAll(context: viewContext) }
+        .sheet(isPresented: $newApplication) {
+            ApplicationNewView(isPresented: $newApplication)
+        }
     }
 }
 

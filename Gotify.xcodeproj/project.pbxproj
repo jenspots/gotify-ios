@@ -11,6 +11,9 @@
 		B43ACB4D28747C7D0099A52B /* UserDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43ACB4C28747C7D0099A52B /* UserDetailView.swift */; };
 		B43ACB50287481BA0099A52B /* TextModify.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43ACB4F287481BA0099A52B /* TextModify.swift */; };
 		B43ACB522874924B0099A52B /* ApplicationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43ACB512874924B0099A52B /* ApplicationDetailView.swift */; };
+		B43ACB542875899F0099A52B /* ClientNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43ACB532875899F0099A52B /* ClientNewView.swift */; };
+		B43ACB56287589AA0099A52B /* UserNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43ACB55287589AA0099A52B /* UserNewView.swift */; };
+		B43ACB58287589B50099A52B /* ApplicationNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43ACB57287589B50099A52B /* ApplicationNewView.swift */; };
 		B43EE893286E25F8002BEE9F /* KeyValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43EE892286E25F8002BEE9F /* KeyValues.swift */; };
 		B43EE895286E283B002BEE9F /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43EE894286E283B002BEE9F /* Server.swift */; };
 		B43EE897286E551D002BEE9F /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43EE896286E551D002BEE9F /* ImagePickerView.swift */; };
@@ -20,7 +23,6 @@
 		B477F0E9286B231600852AFE /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = B477F0E8286B231600852AFE /* Persistence.swift */; };
 		B477F0EC286B231600852AFE /* Gotify.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B477F0EA286B231600852AFE /* Gotify.xcdatamodeld */; };
 		B477F0FC286B25AB00852AFE /* GotifyError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B477F0FB286B25AB00852AFE /* GotifyError.swift */; };
-		B477F104286B28CC00852AFE /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = B477F103286B28CC00852AFE /* Alamofire */; };
 		B477F106286B31F500852AFE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B477F105286B31F500852AFE /* ContentView.swift */; };
 		B4ADD31D286DA42700CC58AF /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ADD319286DA42700CC58AF /* Application.swift */; };
 		B4ADD31F286DA42700CC58AF /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ADD31B286DA42700CC58AF /* Message.swift */; };
@@ -47,6 +49,9 @@
 		B43ACB4C28747C7D0099A52B /* UserDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailView.swift; sourceTree = "<group>"; };
 		B43ACB4F287481BA0099A52B /* TextModify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextModify.swift; sourceTree = "<group>"; };
 		B43ACB512874924B0099A52B /* ApplicationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationDetailView.swift; sourceTree = "<group>"; };
+		B43ACB532875899F0099A52B /* ClientNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientNewView.swift; sourceTree = "<group>"; };
+		B43ACB55287589AA0099A52B /* UserNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNewView.swift; sourceTree = "<group>"; };
+		B43ACB57287589B50099A52B /* ApplicationNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationNewView.swift; sourceTree = "<group>"; };
 		B43EE892286E25F8002BEE9F /* KeyValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValues.swift; sourceTree = "<group>"; };
 		B43EE894286E283B002BEE9F /* Server.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
 		B43EE896286E551D002BEE9F /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
@@ -83,7 +88,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B4FC91BE2871E421003DE01F /* SwiftyJSON in Frameworks */,
-				B477F104286B28CC00852AFE /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,6 +164,9 @@
 				B4C8E3FD286F0125009C1063 /* ServerDetailView.swift */,
 				B4ADD331286DC9D100CC58AF /* SettingsView.swift */,
 				B43ACB4C28747C7D0099A52B /* UserDetailView.swift */,
+				B43ACB532875899F0099A52B /* ClientNewView.swift */,
+				B43ACB55287589AA0099A52B /* UserNewView.swift */,
+				B43ACB57287589B50099A52B /* ApplicationNewView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -201,7 +208,6 @@
 			);
 			name = Gotify;
 			packageProductDependencies = (
-				B477F103286B28CC00852AFE /* Alamofire */,
 				B4FC91BD2871E421003DE01F /* SwiftyJSON */,
 			);
 			productName = Gotify;
@@ -268,12 +274,15 @@
 				B43EE897286E551D002BEE9F /* ImagePickerView.swift in Sources */,
 				B43ACB4D28747C7D0099A52B /* UserDetailView.swift in Sources */,
 				B477F0EC286B231600852AFE /* Gotify.xcdatamodeld in Sources */,
+				B43ACB542875899F0099A52B /* ClientNewView.swift in Sources */,
 				B4FC91C32872139C003DE01F /* User.swift in Sources */,
 				B43ACB522874924B0099A52B /* ApplicationDetailView.swift in Sources */,
 				B4ADD324286DB6FC00CC58AF /* MessageDetailView.swift in Sources */,
 				B4ADD328286DBBFB00CC58AF /* ApplicationListView.swift in Sources */,
 				B4ADD326286DB94700CC58AF /* ApplicationMessageView.swift in Sources */,
+				B43ACB58287589B50099A52B /* ApplicationNewView.swift in Sources */,
 				B4C8E40F2870ABEF009C1063 /* KeyValueText.swift in Sources */,
+				B43ACB56287589AA0099A52B /* UserNewView.swift in Sources */,
 				B4ADD32A286DBC7D00CC58AF /* ApplicationRowComponent.swift in Sources */,
 				B4C8E408286F1268009C1063 /* Paging.swift in Sources */,
 				B4C8E406286F0DD3009C1063 /* SensitiveText.swift in Sources */,
@@ -512,11 +521,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B477F103286B28CC00852AFE /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B477F102286B28CC00852AFE /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
 		B4FC91BD2871E421003DE01F /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B4FC91BC2871E421003DE01F /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
