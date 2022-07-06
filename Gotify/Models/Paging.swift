@@ -8,28 +8,28 @@
 import SwiftyJSON
 import Foundation
 
-struct Paging: Serializeable {
+struct Paging: Serializable {
     var limit: Int64
     var next: String?
     var since: Int64
     var size: Int64
-    
+
     func toJSON() -> JSON {
         var result = JSON([
             "limit": limit,
             "since": since,
             "size": size
         ])
-        
+
         if let next = next {
             result["next"] = JSON(next)
         }
-        
+
         return result
     }
-    
+
     static func fromJSON(json: JSON) -> Paging {
-        return Paging(
+        Paging(
             limit: json["limit"].int64!,
             next: json["next"].string,
             since: json["since"].int64!,

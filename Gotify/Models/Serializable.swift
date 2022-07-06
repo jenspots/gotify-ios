@@ -7,32 +7,31 @@
 
 import SwiftyJSON
 
-protocol Serializeable {
-    
-    
+protocol Serializable {
+
     // Convert an instance to JSON
     func toJSON() -> JSON
-    
+
     // Convert an object from JSON to an instance
     static func fromJSON(json: JSON) -> Self
 }
 
-struct Nil: Serializeable {
+struct Nil: Serializable {
     func toJSON() -> JSON {
-        return JSON()
+        JSON()
     }
-    
+
     static func fromJSON(json: JSON) -> Self {
-        return Nil()
+        Nil()
     }
 }
 
-extension Array: Serializeable where Iterator.Element: Serializeable {
+extension Array: Serializable where Iterator.Element: Serializable {
     func toJSON() -> JSON {
-        return JSON(self.map { $0.toJSON() })
+        JSON(self.map { $0.toJSON() })
     }
-    
+
     static func fromJSON(json: JSON) -> Self {
-        return json.arrayValue.map { Iterator.Element.fromJSON(json: $0) }
+        json.arrayValue.map { Iterator.Element.fromJSON(json: $0) }
     }
 }

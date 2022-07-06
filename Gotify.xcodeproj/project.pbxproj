@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31B8455F41D1A3CA5872B6BA /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 31B841BE90E508E781A23E84 /* .swiftlint.yml */; };
 		B43ACB47287464CC0099A52B /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43ACB46287464CC0099A52B /* Client.swift */; };
 		B43ACB4D28747C7D0099A52B /* UserDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43ACB4C28747C7D0099A52B /* UserDetailView.swift */; };
 		B43ACB50287481BA0099A52B /* TextModify.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43ACB4F287481BA0099A52B /* TextModify.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		31B841BE90E508E781A23E84 /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		B43ACB46287464CC0099A52B /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		B43ACB4C28747C7D0099A52B /* UserDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailView.swift; sourceTree = "<group>"; };
 		B43ACB4F287481BA0099A52B /* TextModify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextModify.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 			children = (
 				B477F0DE286B231500852AFE /* Gotify */,
 				B477F0DD286B231500852AFE /* Products */,
+				31B841BE90E508E781A23E84 /* .swiftlint.yml */,
 			);
 			sourceTree = "<group>";
 		};
@@ -239,7 +242,7 @@
 			);
 			mainGroup = B477F0D3286B231500852AFE;
 			packageReferences = (
-				B477F102286B28CC00852AFE /* XCRemoteSwiftPackageReference "Alamofire" */,
+				B477F102286B28CC00852AFE /* XCRemoteSwiftPackageReference "Alamofire.git" */,
 				B4FC91BC2871E421003DE01F /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 			);
 			productRefGroup = B477F0DD286B231500852AFE /* Products */;
@@ -258,6 +261,7 @@
 			files = (
 				B477F0E7286B231600852AFE /* Preview Assets.xcassets in Resources */,
 				B477F0E4286B231600852AFE /* Assets.xcassets in Resources */,
+				31B8455F41D1A3CA5872B6BA /* .swiftlint.yml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,7 +506,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B477F102286B28CC00852AFE /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+		B477F102286B28CC00852AFE /* XCRemoteSwiftPackageReference "Alamofire.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {

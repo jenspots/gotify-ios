@@ -8,19 +8,19 @@
 import Foundation
 import SwiftyJSON
 
-struct GotifyError: Error, Decodable, Equatable, Serializeable {
+struct GotifyError: Error, Decodable, Equatable, Serializable {
     var error: String
     var errorCode: Int64
     var errorDescription: String
-    
+
     // Serializable
     func toJSON() -> JSON {
         fatalError("Not implemented")
     }
-    
+
     // Serializable
     static func fromJSON(json: JSON) -> Self {
-        return GotifyError(
+        GotifyError(
             error: json["error"].string!,
             errorCode: json["errorCode"].int64!,
             errorDescription: json["errorDescription"].string!
@@ -28,7 +28,7 @@ struct GotifyError: Error, Decodable, Equatable, Serializeable {
     }
 
     static func unknown() -> GotifyError {
-        return .init(
+        .init(
             error: "There was an issue during transmission.",
             errorCode: 1,
             errorDescription: "There was an issue during transmission."

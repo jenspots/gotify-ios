@@ -11,7 +11,7 @@ struct SensitiveText: View {
     @State var left: String
     @State var right: String
     @State var redact: Bool = true
-    
+
     var body: some View {
         HStack {
             Text(left)

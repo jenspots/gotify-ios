@@ -11,33 +11,35 @@ import SwiftyJSON
 import CoreData
 import SwiftUI
 
-public class User: NSManagedObject, Serializeable {
-    
-    var password: String? = nil
+public class User: NSManagedObject, Serializable {
+
+    var password: String?
 
     var nameValue: String {
-        get { return self.name! }
-        set { self.name = newValue }
+        get {
+            name!
+        }
+        set { name = newValue }
     }
-    
+
     static func new() -> User {
-        return User(entity: entity(), insertInto: nil)
+        User(entity: entity(), insertInto: nil)
     }
-        
+
     // Serializeable
     func toJSON() -> JSON {
         var result = JSON([
-            "admin": self.admin,
-            "name": self.name!
+            "admin": admin,
+            "name": name!
         ])
-        
+
         if let password = password {
             result["pass"] = JSON(stringLiteral: password)
         }
-        
+
         return result
     }
-    
+
     // Serializeable
     static func fromJSON(json: JSON) -> Self {
         let result = User.new()
@@ -54,25 +56,25 @@ public class User: NSManagedObject, Serializeable {
             body: nil,
             method: .get
         )
-        
+
         if let users = users {
             for user in users {
                 do {
                     let request = User.fetchRequest()
                     request.predicate = NSPredicate(format: "id == %d", user.id)
                     let queryResult = try context.fetch(request)
-                    
+
                     if queryResult.count > 2 {
                         fatalError("Core Data Error: uniqueness constrained broken")
                     }
-                    
+
                     if let queryResult = queryResult.first {
                         queryResult.admin = user.admin
                         queryResult.name = user.name
                     } else {
                         context.insert(user)
                     }
-                    
+
                     DispatchQueue.main.async { try? context.save() }
                 } catch {
                     print(error.localizedDescription)
@@ -82,54 +84,53 @@ public class User: NSManagedObject, Serializeable {
 
         return nil
     }
-    
+
     // Push edited user to the server
     func put(context: NSManagedObjectContext) async -> GotifyError? {
         let (_, _): (Int, User?) = await API.request(
-            slug: "/user/\(self.id)",
+            slug: "/user/\(id)",
             body: self,
             method: .post
         )
-        DispatchQueue.main.async{ try? context.save() }
+        DispatchQueue.main.async { try? context.save() }
         return nil
     }
-    
+
     // Delete client
     func delete(context: NSManagedObjectContext) async -> GotifyError? {
         let (_, _): (Int, Nil?) = await API.request(
-            slug: "/user/\(self.id)",
+            slug: "/user/\(id)",
             body: nil,
             method: .delete
         )
-        
+
         context.delete(self)
         DispatchQueue.main.async { try? context.save() }
 
         return nil
     }
-    
+
     static func fetchAll() -> FetchRequest<User> {
-        return FetchRequest<User>(
+        FetchRequest<User>(
             sortDescriptors: [NSSortDescriptor(keyPath: \User.name, ascending: true)],
             animation: .default
         )
     }
-    
+
     func create(context: NSManagedObjectContext) async -> GotifyError? {
         let (_, user): (Int, User?) = await API.request(
             slug: "/user",
             body: self,
             method: .post
         )
-        
+
         if let user = user {
             context.insert(user)
             DispatchQueue.main.async { try? context.save() }
         } else {
             // IN ERROR
         }
-        
+
         return nil
     }
-
 }

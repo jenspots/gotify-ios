@@ -63,7 +63,7 @@ Disable this setting to receive no notifications whatsoever. This overrides appl
                     }
                 }
 
-                Section(header: Text("About"), footer: HStack() {
+                Section(header: Text("About"), footer: HStack {
                     Spacer()
                     VStack(spacing: 5) {
                         Text("Version 1.0.0")

@@ -67,7 +67,7 @@ struct PersistenceController {
 
         /* Allows overwriting when identifiers match. */
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        
+
         /* Initialize. */
         container.loadPersistentStores { _, error in
             if let error = error as NSError? {

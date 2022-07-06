@@ -6,27 +6,26 @@
 //
 //
 
-import Alamofire
 import CoreData
 import SwiftyJSON
 import Foundation
 import SwiftUI
 
-public final class Application: NSManagedObject, Serializeable {
-    
+public final class Application: NSManagedObject, Serializable {
+
     var slug: String {
-        get { return "/application/\(id)" }
+        get { "/application/\(id)" }
     }
-    
+
     static func new() -> Application {
-        return Application(entity: entity(), insertInto: nil)
+        Application(entity: entity(), insertInto: nil)
     }
-    
+
     var nameValue: String {
-        get { return self.name! }
-        set { self.name = newValue }
+        get { name! }
+        set { name = newValue }
     }
-    
+
     // Serializable
     static func fromJSON(json: JSON) -> Self {
         let result = Application.new()
@@ -37,24 +36,24 @@ public final class Application: NSManagedObject, Serializeable {
         result.about = json["description"].string
         return result as! Self
     }
-   
+
     // Serializable
     func toJSON() -> JSON {
-        return JSON([
+        JSON([
             "id": id,
             "name": name ?? "",
             "description": about ?? ""
         ])
     }
-    
+
     // Delete an application form the server, then from memory.
     func delete(context: NSManagedObjectContext) async -> GotifyError? {
         let (_, _): (Int, Nil?) = await API.request(
-            slug: "/application/\(self.id)",
+            slug: "/application/\(id)",
             body: nil,
             method: .delete
         )
-        
+
         context.delete(self)
         DispatchQueue.main.async { try? context.save() }
 
@@ -67,7 +66,7 @@ public final class Application: NSManagedObject, Serializeable {
             body: self,
             method: .put
         )
-        DispatchQueue.main.async{ try? context.save() }
+        DispatchQueue.main.async { try? context.save() }
         return nil
     }
 
@@ -78,54 +77,54 @@ public final class Application: NSManagedObject, Serializeable {
             body: nil,
             method: .get
         )
-        
+
         if let applications = applications {
             for application in applications {
                 do {
                     let request = Application.fetchRequest()
                     request.predicate = NSPredicate(format: "id == %d", application.id)
                     let queryResult = try context.fetch(request)
-                    
+
                     if queryResult.count > 2 {
                         fatalError("Core Data Error: uniqueness constrained broken")
                     }
-                    
+
                     if let queryResult = queryResult.first {
                         queryResult.name = application.name
                         queryResult.about = application.about
                     } else {
                         context.insert(application)
                     }
-                    
+
                     DispatchQueue.main.async { try? context.save() }
                 } catch {
                     print(error.localizedDescription)
                 }
             }
         }
-        
+
         return nil
     }
-    
+
     func create(context: NSManagedObjectContext) async -> GotifyError? {
         let (_, application): (Int, Application?) = await API.request(
             slug: "/application",
             body: self,
             method: .post
         )
-        
+
         if let application = application {
             context.insert(application)
             DispatchQueue.main.async { try? context.save() }
         } else {
             // IN ERROR
         }
-        
+
         return nil
     }
-    
+
     static func fetchAll() -> FetchRequest<Application> {
-        return FetchRequest<Application>(
+        FetchRequest<Application>(
             sortDescriptors: [NSSortDescriptor(keyPath: \Application.name, ascending: true)],
             animation: .default
         )

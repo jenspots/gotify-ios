@@ -11,7 +11,7 @@ import SwiftyJSON
 import CoreData
 import SwiftUI
 
-private class PaginatedMessages: Serializeable {
+private class PaginatedMessages: Serializable {
     
     fileprivate let messages: [Message]
     fileprivate let paging: Paging
@@ -22,7 +22,7 @@ private class PaginatedMessages: Serializeable {
     }
     
     static func fromJSON(json: JSON) -> Self {
-        let messages = Array<Message>.fromJSON(json: json["messages"])
+        let messages = [Message].fromJSON(json: json["messages"])
         let paging = Paging.fromJSON(json: json["paging"])
         return PaginatedMessages(messages: messages, paging: paging) as! Self
     }
@@ -36,7 +36,7 @@ private class PaginatedMessages: Serializeable {
     
 }
 
-public class Message: NSManagedObject, Serializeable {
+public class Message: NSManagedObject, Serializable {
     
     static func new() -> Message {
         return Message(entity: entity(), insertInto: nil)
@@ -64,16 +64,16 @@ public class Message: NSManagedObject, Serializeable {
     
     // Serializable
     func toJSON() -> JSON {
-        return JSON([
-            "message": self.message ?? "",
-            "priority": self.priority,
-            "title": self.title ?? ""
+        JSON([
+            "message": message ?? "",
+            "priority": priority,
+            "title": title ?? ""
         ])
     }
 
     func delete(context: NSManagedObjectContext) async -> GotifyError? {
         do {
-            try self.validateForDelete()
+            try validateForDelete()
         } catch {
             print(error.localizedDescription)
             return nil
@@ -139,7 +139,7 @@ public class Message: NSManagedObject, Serializeable {
             }
         }
 
-        DispatchQueue.main.async{ try? context.save() }
+        DispatchQueue.main.async { try? context.save() }
         return nil
     }
     
@@ -159,10 +159,10 @@ public class Message: NSManagedObject, Serializeable {
     }
     
     static func fetchUnreadCount(application: Application) -> FetchRequest<Message> {
-        return FetchRequest<Message>(
-            sortDescriptors: [],
-            predicate: NSPredicate(format: "appid == %d AND read == 0", application.id),
-            animation: .default
+        FetchRequest<Message>(
+                sortDescriptors: [],
+                predicate: NSPredicate(format: "appid == %d AND read == 0", application.id),
+                animation: .default
         )
     }
     
