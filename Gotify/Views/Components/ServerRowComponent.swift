@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ServerRowComponent: View {
+
+    @AppStorage("serverUrl") var serverUrl: String = ""
     @State var server: Server
     @State var connected: Bool? = nil
     
@@ -34,7 +36,7 @@ struct ServerRowComponent: View {
                     .foregroundColor(connected != nil ? (connected! ? .green : .red) : .gray)
                     .saturation(0.75)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(Server.shared.urlSansProtocol())
+                    Text(serverUrl)
                         .fontWeight(.medium)
                     if let connected = connected {
                         Text(connected ? "Connected" : "Unreachable")

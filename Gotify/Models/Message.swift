@@ -6,7 +6,6 @@
 //
 //
 
-import Alamofire
 import SwiftyJSON
 import CoreData
 import SwiftUI
@@ -39,7 +38,7 @@ private class PaginatedMessages: Serializable {
 public class Message: NSManagedObject, Serializable {
     
     static func new() -> Message {
-        return Message(entity: entity(), insertInto: nil)
+        Message(entity: entity(), insertInto: nil)
     }
     
     // Required for the fromJSON function.

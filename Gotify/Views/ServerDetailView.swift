@@ -8,62 +8,53 @@
 import SwiftUI
 
 struct ServerDetailView: View {
-    @Environment(\.managedObjectContext)
-    private var context
+    // We require the Core Data context to view and change objects
+    @Environment(\.managedObjectContext) private var context
 
-    @FetchRequest
-    var users: FetchedResults<User>
-    
-    @FetchRequest
-    var clients: FetchedResults<Client>
-    
-    @FetchRequest
-    var applications: FetchedResults<Application>
+    // The server configuration
+    @AppStorage("serverUrl") var serverUrl: String = ""
+    @AppStorage("serverToken") var serverToken: String = ""
 
-    @State
-    var url: String = "127.0.0.1"
-    
-    @State
-    var token: String = "secret-token"
-    
-    @State
-    var newClient: Bool = false
-    
-    @State
-    var newApplication: Bool = false
+    // The data that will be shown in this view
+    @FetchRequest var users: FetchedResults<User>
+    @FetchRequest var clients: FetchedResults<Client>
+    @FetchRequest var applications: FetchedResults<Application>
 
-    @State
-    var newUser: Bool = false
+    // Temporary values to prevent writing to AppStorage directly
+    @State var url: String = "something went wrong"
+    @State var token: String = "something went wrong"
 
-    @State
-    var genericString1: String = ""
-    
-    @State
-    var genericString2: String = ""
-    
-    @State
-    var genericToggle1: Bool = false
+    // Sheet controllers
+    @State var newClient: Bool = false
+    @State var newApplication: Bool = false
+    @State var newUser: Bool = false
 
+    // Text components
     var urlDescription: String = "To guarantee a secure connection, HTTPS is required. Both IP addresses and domain names are accepted."
     var tokenDescription: String = "This application requires a client token to communicate with the server."
 
     init() {
+        // Fetch requests
         _users = User.fetchAll()
         _clients = Client.fetchAll()
         _applications = Application.fetchAll()
+
+        // Temporary values
+        _url = State(wrappedValue: serverUrl)
+        _token = State(wrappedValue: serverToken)
     }
 
     var body: some View {
         List {
             Section(header: Text("Configuration")) {
-                NavigationLink(destination: TextModify(fieldName: "URL", value: $url, description: urlDescription)) {
-                    KeyValueText(left: "URL", right: Server.shared.urlSansProtocol())
+                NavigationLink(destination: TextModify(fieldName: "URL", value: $url, description: urlDescription).onDisappear { UserDefaults.standard.set(url, forKey: "serverUrl") }) {
+                    KeyValueText(left: "URL", right: $serverUrl)
                 }
-                NavigationLink(destination: TextModify(fieldName: "Token", value: $token, description: tokenDescription)) {
-                    SensitiveText(left: "Token", right: Server.shared.token)
+                NavigationLink(destination: TextModify(fieldName: "Token", value: $token, description: tokenDescription).onDisappear { UserDefaults.standard.set(token, forKey: "serverToken") }) {
+                    KeyValueText(left: "Token", right: $serverToken)
                 }
             }
-                        
+
             Section(header: Text("Applications")) {
                 ForEach(applications) { application in
                     NavigationLink(destination: ApplicationDetailView(application: application)) {
@@ -75,7 +66,7 @@ struct ServerDetailView: View {
                         Task { await applications[index].delete(context: context) }
                     }
                 }
-                
+
                 Button(action: { newApplication.toggle() }) {
                     Text("New Application")
                 }
@@ -93,13 +84,13 @@ struct ServerDetailView: View {
                         Task { await clients[index].delete(context: context) }
                     }
                 }
-                
+
                 Button(action: { newClient.toggle() }) {
                     Text("New Client")
                 }
                 .foregroundColor(.gray)
             }
-            
+
             Section(header: Text("Users")) {
                 ForEach(users) { user in
                     NavigationLink(destination: UserDetailView(user: user)) {
@@ -111,7 +102,7 @@ struct ServerDetailView: View {
                         Task { await users[index].delete(context: context) }
                     }
                 }
-                
+
                 Button(action: { newUser.toggle() }) {
                     Text("New User")
                 }

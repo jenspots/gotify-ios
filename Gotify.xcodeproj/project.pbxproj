@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31B845088951C8B9599C4649 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B84C5AC1DA705876A19061 /* WelcomeView.swift */; };
 		31B8455F41D1A3CA5872B6BA /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 31B841BE90E508E781A23E84 /* .swiftlint.yml */; };
 		B43ACB47287464CC0099A52B /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43ACB46287464CC0099A52B /* Client.swift */; };
 		B43ACB4D28747C7D0099A52B /* UserDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43ACB4C28747C7D0099A52B /* UserDetailView.swift */; };
@@ -47,6 +48,7 @@
 
 /* Begin PBXFileReference section */
 		31B841BE90E508E781A23E84 /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		31B84C5AC1DA705876A19061 /* WelcomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		B43ACB46287464CC0099A52B /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		B43ACB4C28747C7D0099A52B /* UserDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailView.swift; sourceTree = "<group>"; };
 		B43ACB4F287481BA0099A52B /* TextModify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextModify.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				B43ACB532875899F0099A52B /* ClientNewView.swift */,
 				B43ACB55287589AA0099A52B /* UserNewView.swift */,
 				B43ACB57287589B50099A52B /* ApplicationNewView.swift */,
+				31B84C5AC1DA705876A19061 /* WelcomeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 				B477F106286B31F500852AFE /* ContentView.swift in Sources */,
 				B477F0FC286B25AB00852AFE /* GotifyError.swift in Sources */,
 				B477F0E0286B231500852AFE /* GotifyApp.swift in Sources */,
+				31B845088951C8B9599C4649 /* WelcomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

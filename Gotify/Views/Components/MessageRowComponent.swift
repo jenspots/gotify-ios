@@ -30,10 +30,10 @@ struct MessageRowComponent: View {
                         Text("Notification")
                     }
 
-                Text(message.message!.trimmingCharacters(in: .whitespacesAndNewlines))
+                Text(message.message ?? "Removed")
                     .lineLimit(3)
 
-                Text(message.date!.formatted(date: .numeric, time: .shortened))
+                Text(message.date?.formatted(date: .numeric, time: .shortened) ?? "Removed")
                     .font(.subheadline)
                     .lineLimit(1)
                     .foregroundColor(.gray)

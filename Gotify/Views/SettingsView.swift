@@ -10,24 +10,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @State var serverUrl: String = ""
-    
     @AppStorage("notificationsActiveGlobal") var notificationsActiveGlobal: Bool = true
-
-    private var values: [String: String] {
-        let request: NSFetchRequest<KeyValues> = KeyValues.fetchRequest()
-        var result: [String: String] = [:]
-        guard let entries = try? viewContext.fetch(request)
-        else {
-            return result
-        }
-
-        for entry in entries {
-            result[entry.key!] = entry.value!
-        }
-
-        return result
-    }
 
     @State var newtoken: String = ""
     
@@ -80,6 +63,21 @@ Disable this setting to receive no notifications whatsoever. This overrides appl
                         Text("Acknowledgements")
                     }
                 }
+
+                Section(header: Text("Danger Zone")) {
+                    Button(action: {
+                        // Delete local AppStorage
+                        UserDefaults.standard.removeObject(forKey: "serverUrl")
+                        UserDefaults.standard.removeObject(forKey: "serverToken")
+
+                        // Remove CoreData storage
+                        // TODO
+                    }) {
+                        Text("Reset App")
+                                .foregroundColor(.red)
+                    }
+                }
+
             }
             .navigationTitle("Settings")
         }

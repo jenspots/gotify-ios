@@ -86,6 +86,7 @@ struct ApplicationMessageView: View {
         .listStyle(GroupedListStyle())
         .navigationBarTitle(application.name ?? "")
         .navigationBarTitleDisplayMode(.inline)
+        .task { await Application.getAll(context: context) }
     }
 }
 

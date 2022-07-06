@@ -34,7 +34,7 @@ Notifications are disabled globally and need to be enabled before changing appli
                     KeyValueText(left: "Name", right: $newName)
                 }
                 NavigationLink(destination: TextModify(fieldName: "Description", value: $newDescription)) {
-                    KeyValueText(left: "Name", right: $newDescription)
+                    KeyValueText(left: "Description", right: $newDescription)
                 }
                 Toggle("Notifications", isOn: $application.notifyUser)
                     .disabled(!notificationsActiveGlobal)
