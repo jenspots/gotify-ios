@@ -19,32 +19,23 @@ struct ApplicationRowComponent: View {
     }
     
     var body: some View {
-        HStack(spacing: 15) {
-            ZStack {
+        NavigationLink(destination: ApplicationMessageView(application: application)) {
+            HStack(alignment: .center, spacing: 15) {
                 Image("mascott")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 50)
+                        .frame(width: 40)
                         .mask(Circle())
-                Text("\(messages.count)")
-                        .font(.footnote)
-                        .padding(3)
-                        .foregroundColor(.white)
-                        .background(.red)
-                        .cornerRadius(500)
-                        .padding(.leading, 35)
-                        .padding(.top, -25)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("\(application.name ?? "") (\(messages.count))")
+                            .fontWeight(.medium)
+                    Text(application.about ?? "")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                }
             }
-            VStack(alignment: .leading) {
-                Text(application.name ?? "")
-                        .font(.title3)
-                        .fontWeight(.medium)
-                Text(application.about ?? "")
-                        .font(.subheadline)
-                        .fontWeight(.regular)
-            }
+            .padding(.vertical, 10)
         }
-        .padding(.vertical, 5)
         .task { await Message.getAll(context: context, application: application)}
     }
 }

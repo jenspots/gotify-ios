@@ -81,6 +81,7 @@ Disable this setting to receive no notifications whatsoever. This overrides appl
             }
             .navigationTitle("Settings")
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

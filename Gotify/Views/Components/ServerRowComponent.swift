@@ -38,6 +38,7 @@ struct ServerRowComponent: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(serverUrl)
                         .fontWeight(.medium)
+                        .lineLimit(1)
                     if let connected = connected {
                         Text(connected ? "Connected" : "Unreachable")
                             .font(.footnote)
@@ -53,6 +54,7 @@ struct ServerRowComponent: View {
         }
         .onReceive(timer) { _ in checkHealth() }
         .onAppear { checkHealth() }
+        .padding(.vertical, 5)
     }
 }
 

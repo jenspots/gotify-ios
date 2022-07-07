@@ -21,9 +21,7 @@ struct ApplicationListView: View {
         NavigationView {
             List {
                 ForEach(apps) { application in
-                    NavigationLink(destination: ApplicationMessageView(application: application)) {
-                        ApplicationRowComponent(application: application)
-                    }
+                    ApplicationRowComponent(application: application)
                 }
                 .onDelete { indices in
                     indices.forEach { index in
@@ -31,7 +29,6 @@ struct ApplicationListView: View {
                     }
                 }
             }
-            .navigationTitle("Applications")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { newApplication = true }) {
@@ -39,7 +36,9 @@ struct ApplicationListView: View {
                     }
                 }
             }
+            .navigationBarTitle("Applications")
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .refreshable { await Application.getAll(context: viewContext) }
         .sheet(isPresented: $newApplication) {
             ApplicationNewView(isPresented: $newApplication)

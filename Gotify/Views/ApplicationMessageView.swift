@@ -13,8 +13,10 @@ struct ApplicationMessageView: View {
     @Environment(\.managedObjectContext) private var context
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
-    
-    @State var application: Application
+    @Environment(\.editMode) var editMode
+
+    @State private var application: Application
+    @State private var selection = Set<Message>()
 
     @FetchRequest
     var messages: FetchedResults<Message>
@@ -28,9 +30,17 @@ struct ApplicationMessageView: View {
             animation: .default
         )
     }
+    
+    func editing() -> Bool {
+        if let editMode = editMode {
+            return editMode.wrappedValue == .active
+        } else {
+            return false
+        }
+    }
         
     var body: some View {
-        List {
+        List(selection: $selection) {
             Section(content: {}, header: {
                 HStack(alignment: .center) {
                     Spacer() // Required for some reason
@@ -87,6 +97,34 @@ struct ApplicationMessageView: View {
         .navigationBarTitle(application.name ?? "")
         .navigationBarTitleDisplayMode(.inline)
         .task { await Application.getAll(context: context) }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                EditButton()
+            }
+            
+            ToolbarItem(placement: .navigationBarLeading) {
+                if editing() {
+                    Button(action: { messages.forEach { x in selection.insert(x)} } ) {
+                        Text("Select All")
+                    }
+                }
+            }
+            
+            
+            ToolbarItemGroup(placement: .bottomBar) {
+                if editing() {
+                    Button(action: {}) {
+                        Text("Mark as read")
+                    }
+                    Spacer()
+                    Button(action: {}) {
+                        Text("Remove")
+                    }
+                }
+            }
+
+        }
+        .navigationBarBackButtonHidden(editing())
     }
 }
 

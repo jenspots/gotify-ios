@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftyJSON
+import SwiftUI
 
 struct HealthCheck: Serializable {
     let database: Bool
@@ -27,15 +28,14 @@ struct HealthCheck: Serializable {
 }
 
 struct Server {
-    var serverUrl: String
-    var token: String
+    @AppStorage("serverUrl") var serverUrl: String = ""
+    @AppStorage("serverToken") var token: String = ""
 
-    init(serverUrl: String, token: String) {
-        self.serverUrl = serverUrl
-        self.token = token
-    }
+    // No need to allow new instances just yet.
+    private init() {}
 
-    static var shared = Server(serverUrl: "https://notifications.jenspots.com", token: "CsgdEX0D2p2HRbJ")
+    // Singleton instance using AppStorage.
+    static var shared = Server()
 
     func urlSansProtocol() -> String {
         if serverUrl.prefix(8) == "https://" {

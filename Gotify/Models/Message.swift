@@ -106,7 +106,7 @@ public class Message: NSManagedObject, Serializable {
         if let application = application {
             slug = "/application/\(application.id)/message/"
         } else {
-            slug = "message/"
+            slug = "/message/"
         }
 
         let (_, paginatedMessages): (Int, PaginatedMessages?) = await API.request(
