@@ -116,6 +116,10 @@ struct ServerDetailView: View {
             Task { await User.getAll(context: PersistenceController.shared.container.viewContext) }
             Task { await Client.getAll(context: PersistenceController.shared.container.viewContext) }
         }
+        .task{
+            await User.getAll(context: PersistenceController.shared.container.viewContext)
+            await Client.getAll(context: PersistenceController.shared.container.viewContext)
+        }
         .sheet(isPresented: $newClient) {
             ClientNewView(isPresented: $newClient)
         }

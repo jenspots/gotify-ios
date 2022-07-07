@@ -46,10 +46,14 @@ struct API {
         // Add data if it is supplied
         if let body = body {
             if let bodyAsString = try? body.toJSON().rawData() {
-                print("DATA TO SEND: \(body.toJSON().rawString()!)")
+                if verbose {
+                    print("DATA TO SEND: \(body.toJSON().rawString()!)")
+                }
                 request.httpBody = bodyAsString
             } else {
-                print("ERROR: could not encode the supplied data in the request")
+                if verbose {
+                    print("ERROR: could not encode the supplied data in the request")
+                }
                 return (0, nil)
             }
         } else if verbose {

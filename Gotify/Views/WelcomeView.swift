@@ -6,6 +6,7 @@ import Foundation
 import SwiftUI
 
 struct WelcomeView: View {
+    @Environment(\.colorScheme) private var colorScheme
 
     @State var url: String = ""
     @State var token: String = ""
@@ -24,14 +25,13 @@ struct WelcomeView: View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Hello there!")
                     .font(.largeTitle.weight(.bold))
-                    .foregroundColor(.black)
                     .textCase(.none)
 
             Text(welcomeText)
                     .font(.subheadline.weight(.regular))
-                    .foregroundColor(.black)
                     .textCase(.none)
         }
+        .foregroundColor(colorScheme == .dark ? .white : .black)
         .padding(.horizontal, -20)
         .padding(.top, 20)
         .opacity(0.95)

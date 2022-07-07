@@ -43,6 +43,8 @@ struct ApplicationListView: View {
         .sheet(isPresented: $newApplication) {
             ApplicationNewView(isPresented: $newApplication)
         }
+        .task { await Application.getAll(context: viewContext) }
+
     }
 }
 
