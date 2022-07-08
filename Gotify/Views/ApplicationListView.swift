@@ -11,6 +11,7 @@ struct ApplicationListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest var apps: FetchedResults<Application>
     @State var newApplication = false
+    @State private var searchTerm = ""
 
     init() {
         self._apps = Application.fetchAll()
@@ -19,7 +20,7 @@ struct ApplicationListView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(apps) { application in
+                ForEach(apps.filter { searchTerm.isEmpty || $0.name!.lowercased().contains(searchTerm.lowercased()) } ) { application in
                     ApplicationRowComponent(application: application)
                 }
                 .onDelete { indices in
@@ -37,6 +38,7 @@ struct ApplicationListView: View {
             }
             .navigationBarTitle("Applications")
         }
+        .searchable(text: $searchTerm)
         .navigationViewStyle(StackNavigationViewStyle())
         .refreshable { await Application.getAll(context: viewContext) }
         .sheet(isPresented: $newApplication) {

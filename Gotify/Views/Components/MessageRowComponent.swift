@@ -25,13 +25,14 @@ struct MessageRowComponent: View {
                         Text(title)
                             .font(.headline)
                             .fontWeight(.semibold)
-                            .lineLimit(2)
+                            .lineLimit(1)
                     } else {
                         Text("Notification")
                     }
 
                 Text(message.message ?? "Removed")
-                    .lineLimit(3)
+                    .lineLimit(2)
+                    .opacity(0.75)
 
                 Text(message.date?.formatted(date: .numeric, time: .shortened) ?? "Removed")
                     .font(.subheadline)
@@ -40,6 +41,7 @@ struct MessageRowComponent: View {
             }
         }
         .padding(.vertical, 5.0)
+        .padding(.leading, -15.0)
     }
 }
 

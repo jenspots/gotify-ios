@@ -17,6 +17,7 @@ struct ApplicationMessageView: View {
 
     @State private var application: Application
     @State private var selection = Set<Message>()
+    @State private var searchTerm = ""
 
     @FetchRequest
     var messages: FetchedResults<Message>
@@ -136,10 +137,12 @@ struct ApplicationMessageView: View {
                         }
                     }
                     .padding(.bottom, 5)
+                    .padding(.horizontal, -10)
                 }
             }
         }
         .navigationBarBackButtonHidden(editing())
+        .searchable(text: $searchTerm)
     }
 }
 

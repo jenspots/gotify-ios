@@ -32,9 +32,9 @@ struct ApplicationRowComponent: View {
                         .mask(Circle())
                 VStack(alignment: .leading, spacing: 2) {
                     Text(application.name ?? "")
+                            .font(.title3)
                             .fontWeight(.medium)
                     Text(application.about ?? "")
-                            .font(.footnote)
                             .foregroundColor(.gray)
                 }
             }

@@ -42,12 +42,12 @@ struct ServerRowComponent: View {
                     .foregroundColor(connected != nil ? (connected! ? .green : .red) : .gray)
                     .saturation(0.75)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(serverUrl)
+                    Text(Server.shared.urlSansProtocol())
                         .fontWeight(.medium)
                         .lineLimit(1)
+                        .font(.title3)
                     if let connected = connected {
                         Text(connected ? "Connected" : "Unreachable")
-                            .font(.footnote)
                             .foregroundColor(.gray)
                     } else {
                         Text("Unknown")
