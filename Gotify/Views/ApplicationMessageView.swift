@@ -18,6 +18,7 @@ struct ApplicationMessageView: View {
     @State private var application: Application
     @State private var selection = Set<Message>()
     @State private var searchTerm = ""
+    @State var showDetailView = false
 
     @FetchRequest
     var messages: FetchedResults<Message>
@@ -122,18 +123,19 @@ struct ApplicationMessageView: View {
                                 message.markAsRead()
                             }
                         }) {
-                            Text("Mark as read")
+                            Text("Mark As Read")
                         }
                         Spacer()
-                        Button(action: {
+                        Button(role: .destructive) {
                             selection.forEach { message in
                                 selection.remove(message)
                                 Task {
                                     await message.delete(context: context)
                                 }
                             }
-                        }) {
+                        } label: {
                             Text("Remove")
+                                .foregroundColor(.red)
                         }
                     }
                     .padding(.bottom, 5)
@@ -143,6 +145,13 @@ struct ApplicationMessageView: View {
         }
         .navigationBarBackButtonHidden(editing())
         .searchable(text: $searchTerm)
+        .background {
+            NavigationLink(
+                isActive: $showDetailView,
+                destination: { ApplicationDetailView(application: application) },
+                label: { EmptyView() }
+            ).opacity(0.0)
+        }
     }
 }
 

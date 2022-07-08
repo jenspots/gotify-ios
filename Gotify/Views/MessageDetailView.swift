@@ -39,6 +39,7 @@ struct MessageDetailView: View {
                 .font(.subheadline)
                 .fontWeight(.regular)
                 .foregroundColor(Color.gray)
+                .listRowSeparator(.visible, edges: .bottom)
             Text(message.message ?? "")
                 .listRowSeparator(.hidden)
         }

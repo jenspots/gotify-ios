@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct MessageRowComponent: View {
+    @Environment(\.managedObjectContext) private var context
     @ObservedObject var message: Message
 
     var body: some View {
-        HStack {
+        HStack(spacing: 0) {
             VStack {
-                Circle().frame(width: 10, height: 10)
+                Circle().frame(width: 8, height: 8)
                     .foregroundColor(.blue)
                     .opacity(message.read ? 0.0 : 1.0)
+                    .padding(.horizontal, 6)
                     .padding(.top, 5)
                 Spacer()
             }
@@ -41,7 +43,19 @@ struct MessageRowComponent: View {
             }
         }
         .padding(.vertical, 5.0)
-        .padding(.leading, -15.0)
+        .padding(.leading, -20.0)
+            .contextMenu {
+                Button {
+                    message.markAsRead()
+                } label: {
+                    Label("Mark As Read", systemImage: "checkmark.circle")
+                }
+                Button(role: .destructive) {
+                    Task { await message.delete(context: context) }
+                } label: {
+                    Label("Remove", systemImage: "trash")
+                }
+            }
     }
 }
 
