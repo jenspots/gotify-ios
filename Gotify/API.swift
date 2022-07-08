@@ -29,9 +29,12 @@ struct API {
         return decoder
     }()
 
-    private static let session = URLSession(configuration: URLSessionConfiguration.default, delegate: nil, delegateQueue: nil)
+    public static func request<T: Serializable>(slug: String, body: T?, method: Method, verbose: Bool = true) async -> (Int, T?) {
 
-    public static func request<T: Serializable>(slug: String, body: T?, method: Method, verbose: Bool = false) async -> (Int, T?) {
+        guard Server.shared.valid() else {
+            return (0, nil)
+        }
+
         // Craft the request
         var request = URLRequest(url: URL(string: Server.shared.serverUrl + slug)!)
         request.addValue(Server.shared.token, forHTTPHeaderField: "X-Gotify-Key")

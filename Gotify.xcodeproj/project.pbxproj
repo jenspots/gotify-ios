@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31B840050A81F15E22C84B75 /* AppStorageBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B848F54682D40E3B394FFE /* AppStorageBinding.swift */; };
 		31B845088951C8B9599C4649 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B84C5AC1DA705876A19061 /* WelcomeView.swift */; };
 		31B8455F41D1A3CA5872B6BA /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 31B841BE90E508E781A23E84 /* .swiftlint.yml */; };
+		31B84734FCDC0A30B705637C /* NavigationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B84641E0313FAF0818D91B /* NavigationButton.swift */; };
 		B43ACB47287464CC0099A52B /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43ACB46287464CC0099A52B /* Client.swift */; };
 		B43ACB4D28747C7D0099A52B /* UserDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43ACB4C28747C7D0099A52B /* UserDetailView.swift */; };
 		B43ACB50287481BA0099A52B /* TextModify.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43ACB4F287481BA0099A52B /* TextModify.swift */; };
@@ -19,6 +21,7 @@
 		B43EE893286E25F8002BEE9F /* KeyValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43EE892286E25F8002BEE9F /* KeyValues.swift */; };
 		B43EE895286E283B002BEE9F /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43EE894286E283B002BEE9F /* Server.swift */; };
 		B43EE897286E551D002BEE9F /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43EE896286E551D002BEE9F /* ImagePickerView.swift */; };
+		B46E343F2878637F00B4D3DE /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = B46E343E2878637F00B4D3DE /* AlertToast */; };
 		B477F0E0286B231500852AFE /* GotifyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B477F0DF286B231500852AFE /* GotifyApp.swift */; };
 		B477F0E4286B231600852AFE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B477F0E3286B231600852AFE /* Assets.xcassets */; };
 		B477F0E7286B231600852AFE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B477F0E6286B231600852AFE /* Preview Assets.xcassets */; };
@@ -48,6 +51,8 @@
 
 /* Begin PBXFileReference section */
 		31B841BE90E508E781A23E84 /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		31B84641E0313FAF0818D91B /* NavigationButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationButton.swift; sourceTree = "<group>"; };
+		31B848F54682D40E3B394FFE /* AppStorageBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStorageBinding.swift; sourceTree = "<group>"; };
 		31B84C5AC1DA705876A19061 /* WelcomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		B43ACB46287464CC0099A52B /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		B43ACB4C28747C7D0099A52B /* UserDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailView.swift; sourceTree = "<group>"; };
@@ -92,12 +97,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				B4FC91BE2871E421003DE01F /* SwiftyJSON in Frameworks */,
+				B46E343F2878637F00B4D3DE /* AlertToast in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		31B847E3FBFE6E3B477DD338 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				31B848F54682D40E3B394FFE /* AppStorageBinding.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		B477F0D3286B231500852AFE = {
 			isa = PBXGroup;
 			children = (
@@ -127,6 +141,7 @@
 				B477F0EA286B231600852AFE /* Gotify.xcdatamodeld */,
 				B477F0DF286B231500852AFE /* GotifyApp.swift */,
 				B477F0E8286B231600852AFE /* Persistence.swift */,
+				31B847E3FBFE6E3B477DD338 /* Extensions */,
 			);
 			path = Gotify;
 			sourceTree = "<group>";
@@ -193,6 +208,7 @@
 				B4C8E405286F0DD3009C1063 /* SensitiveText.swift */,
 				B4C8E40E2870ABEF009C1063 /* KeyValueText.swift */,
 				B43ACB4F287481BA0099A52B /* TextModify.swift */,
+				31B84641E0313FAF0818D91B /* NavigationButton.swift */,
 			);
 			path = Blocks;
 			sourceTree = "<group>";
@@ -215,6 +231,7 @@
 			name = Gotify;
 			packageProductDependencies = (
 				B4FC91BD2871E421003DE01F /* SwiftyJSON */,
+				B46E343E2878637F00B4D3DE /* AlertToast */,
 			);
 			productName = Gotify;
 			productReference = B477F0DC286B231500852AFE /* Gotify.app */;
@@ -245,8 +262,9 @@
 			);
 			mainGroup = B477F0D3286B231500852AFE;
 			packageReferences = (
-				B477F102286B28CC00852AFE /* XCRemoteSwiftPackageReference "Alamofire.git" */,
+				B477F102286B28CC00852AFE /* XCRemoteSwiftPackageReference "Alamofire" */,
 				B4FC91BC2871E421003DE01F /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				B46E343D2878637F00B4D3DE /* XCRemoteSwiftPackageReference "AlertToast" */,
 			);
 			productRefGroup = B477F0DD286B231500852AFE /* Products */;
 			projectDirPath = "";
@@ -308,6 +326,8 @@
 				B477F0FC286B25AB00852AFE /* GotifyError.swift in Sources */,
 				B477F0E0286B231500852AFE /* GotifyApp.swift in Sources */,
 				31B845088951C8B9599C4649 /* WelcomeView.swift in Sources */,
+				31B840050A81F15E22C84B75 /* AppStorageBinding.swift in Sources */,
+				31B84734FCDC0A30B705637C /* NavigationButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -510,7 +530,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B477F102286B28CC00852AFE /* XCRemoteSwiftPackageReference "Alamofire.git" */ = {
+		B46E343D2878637F00B4D3DE /* XCRemoteSwiftPackageReference "AlertToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elai950/AlertToast.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		B477F102286B28CC00852AFE /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
@@ -529,6 +557,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		B46E343E2878637F00B4D3DE /* AlertToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B46E343D2878637F00B4D3DE /* XCRemoteSwiftPackageReference "AlertToast" */;
+			productName = AlertToast;
+		};
 		B4FC91BD2871E421003DE01F /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B4FC91BC2871E421003DE01F /* XCRemoteSwiftPackageReference "SwiftyJSON" */;

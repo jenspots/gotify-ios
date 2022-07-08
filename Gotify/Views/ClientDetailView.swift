@@ -11,12 +11,16 @@ struct ClientDetailView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) private var context
 
-    @State var client: Client
+    @ObservedObject var client: Client
+
+    init(client: Client) {
+        self.client = client
+    }
 
     var body: some View {
         List {
             Section(header: Text("Details")) {
-                NavigationLink(destination: TextModify(fieldName: "Name", value: $client.nameValue)) {
+                NavigationLink(destination: TextModify(fieldName: "Name", target: $client.nameValue)) {
                     KeyValueText(left: "Name", right: $client.nameValue)
                 }
             }
@@ -31,8 +35,10 @@ struct ClientDetailView: View {
                     }
             }
         }
-        .navigationTitle(client.nameValue)
+        .navigationTitle(client.name ?? "")
         .navigationBarTitleDisplayMode(.inline)
-        .onDisappear { Task { await client.put(context: context) } }
+        .onDisappear {
+            Task { await client.put(context: context) }
+        }
     }
 }

@@ -13,7 +13,7 @@ import SwiftUI
 
 public class User: NSManagedObject, Serializable {
 
-    var password: String?
+    var password: String = ""
 
     var nameValue: String {
         get {
@@ -26,21 +26,21 @@ public class User: NSManagedObject, Serializable {
         User(entity: entity(), insertInto: nil)
     }
 
-    // Serializeable
+    // Serializable
     func toJSON() -> JSON {
         var result = JSON([
             "admin": admin,
             "name": name!
         ])
 
-        if let password = password {
+        if password != "" {
             result["pass"] = JSON(stringLiteral: password)
         }
 
         return result
     }
 
-    // Serializeable
+    // Serializable
     static func fromJSON(json: JSON) -> Self {
         let result = User.new()
         result.id = json["id"].int64!
@@ -87,12 +87,22 @@ public class User: NSManagedObject, Serializable {
 
     // Push edited user to the server
     func put(context: NSManagedObjectContext) async -> GotifyError? {
-        let (_, _): (Int, User?) = await API.request(
+        guard self.hasPersistentChangedValues || password != "" else {
+            return nil
+        }
+
+        let (statusCode, _): (Int, User?) = await API.request(
             slug: "/user/\(id)",
             body: self,
             method: .post
         )
-        DispatchQueue.main.async { try? context.save() }
+
+        if statusCode == 200 {
+            password = "" // reset for security reasons
+            DispatchQueue.main.async {
+                try? context.save()
+            }
+        }
         return nil
     }
 

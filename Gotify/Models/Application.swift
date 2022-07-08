@@ -26,6 +26,11 @@ public final class Application: NSManagedObject, Serializable {
         set { name = newValue }
     }
 
+    var aboutValue: String {
+        get { about! }
+        set { about = newValue }
+    }
+
     // Serializable
     static func fromJSON(json: JSON) -> Self {
         let result = Application.new()
@@ -61,6 +66,10 @@ public final class Application: NSManagedObject, Serializable {
     }
 
     func put(context: NSManagedObjectContext) async -> GotifyError? {
+        guard self.hasPersistentChangedValues else {
+            return nil
+        }
+
         let (_, _): (Int, Application?) = await API.request(
             slug: "/application/\(id)",
             body: self,

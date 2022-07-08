@@ -96,7 +96,6 @@ struct ApplicationMessageView: View {
         .listStyle(GroupedListStyle())
         .navigationBarTitle(application.name ?? "")
         .navigationBarTitleDisplayMode(.inline)
-        .task { await Application.getAll(context: context) }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 EditButton()
@@ -109,8 +108,7 @@ struct ApplicationMessageView: View {
                     }
                 }
             }
-            
-            
+
             ToolbarItemGroup(placement: .bottomBar) {
                 if editing() {
                     Button(action: {}) {

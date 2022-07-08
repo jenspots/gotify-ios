@@ -51,7 +51,8 @@ struct Server {
         let (_, healthCheck): (Int, HealthCheck?) = await API.request(
             slug: "/health",
             body: nil,
-            method: .get
+            method: .get,
+            verbose: false
         )
 
         if let healthCheck = healthCheck {
@@ -59,5 +60,9 @@ struct Server {
         } else {
             return HealthCheck(database: false, health: false)
         }
+    }
+
+    func valid() -> Bool {
+        serverUrl != "" && token != ""
     }
 }

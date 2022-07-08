@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct ServerRowComponent: View {
+    @Environment(\.managedObjectContext) private var context
 
     @AppStorage("serverUrl") var serverUrl: String = ""
     @State var server: Server
     @State var connected: Bool? = nil
     
     let timer = Timer.publish(
-        every: 5,
+        every: 30,
         on: .main,
         in: .common
     ).autoconnect()
@@ -25,9 +26,14 @@ struct ServerRowComponent: View {
             connected = healthCheck.health && healthCheck.database
         }
     }
-    
+
     var body: some View {
-        NavigationLink(destination: ServerDetailView()) {
+        NavigationButton {
+            Task { await User.getAll(context: context) }
+            Task { await Client.getAll(context: context) }
+        } destination: {
+            ServerDetailView()
+        } label: {
             HStack(alignment: .center, spacing: 15) {
                 Image(systemName: "globe.europe.africa.fill")
                     .resizable()

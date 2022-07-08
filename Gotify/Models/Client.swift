@@ -74,6 +74,10 @@ public class Client: NSManagedObject, Serializable {
 
     // Push edited client to the server
     func put(context: NSManagedObjectContext) async -> GotifyError? {
+        guard self.hasPersistentChangedValues else {
+            return nil
+        }
+
         let (_, _): (Int, Client?) = await API.request(
             slug: "/client/\(id)",
             body: self,

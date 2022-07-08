@@ -11,7 +11,7 @@ struct ContentView: View {
 
     @AppStorage("serverUrl") var serverUrl: String = ""
     @AppStorage("serverToken") var serverToken: String = ""
-
+    @Environment(\.managedObjectContext) private var context
     @Binding var noConfigurationSet: Bool
 
     init() {
@@ -38,8 +38,10 @@ struct ContentView: View {
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }
+
         }
         .sheet(isPresented: $noConfigurationSet) { WelcomeView(url: serverUrl, token: serverToken) }
+        .task { await Application.getAll(context: context)}
     }
 }
 

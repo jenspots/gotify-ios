@@ -12,17 +12,13 @@ struct ServerDetailView: View {
     @Environment(\.managedObjectContext) private var context
 
     // The server configuration
-    @AppStorage("serverUrl") var serverUrl: String = ""
-    @AppStorage("serverToken") var serverToken: String = ""
+    @Binding(forKey: "serverUrl") var serverUrl: String
+    @Binding(forKey: "serverToken") var serverToken: String
 
     // The data that will be shown in this view
     @FetchRequest var users: FetchedResults<User>
     @FetchRequest var clients: FetchedResults<Client>
     @FetchRequest var applications: FetchedResults<Application>
-
-    // Temporary values to prevent writing to AppStorage directly
-    @State var url: String = "something went wrong"
-    @State var token: String = "something went wrong"
 
     // Sheet controllers
     @State var newClient: Bool = false
@@ -38,19 +34,15 @@ struct ServerDetailView: View {
         _users = User.fetchAll()
         _clients = Client.fetchAll()
         _applications = Application.fetchAll()
-
-        // Temporary values
-        _url = State(wrappedValue: serverUrl)
-        _token = State(wrappedValue: serverToken)
     }
 
     var body: some View {
         List {
             Section(header: Text("Configuration")) {
-                NavigationLink(destination: TextModify(fieldName: "URL", value: $url, description: urlDescription).onDisappear { UserDefaults.standard.set(url, forKey: "serverUrl") }) {
+                NavigationLink(destination: TextModify(fieldName: "URL", target: $serverUrl, description: urlDescription)) {
                     KeyValueText(left: "URL", right: $serverUrl)
                 }
-                NavigationLink(destination: TextModify(fieldName: "Token", value: $token, description: tokenDescription).onDisappear { UserDefaults.standard.set(token, forKey: "serverToken") }) {
+                NavigationLink(destination: TextModify(fieldName: "Token", target: $serverToken, description: tokenDescription)) {
                     KeyValueText(left: "Token", right: $serverToken)
                 }
             }
@@ -76,7 +68,7 @@ struct ServerDetailView: View {
             Section(header: Text("Clients")) {
                 ForEach(clients) { client in
                     NavigationLink(destination: ClientDetailView(client: client)) {
-                        Text(client.name!)
+                        Text(client.nameValue)
                     }
                 }
                 .onDelete { indices in
@@ -113,12 +105,11 @@ struct ServerDetailView: View {
         .navigationTitle(Server.shared.urlSansProtocol())
         .navigationBarTitleDisplayMode(.inline)
         .refreshable {
-            Task { await User.getAll(context: PersistenceController.shared.container.viewContext) }
-            Task { await Client.getAll(context: PersistenceController.shared.container.viewContext) }
-        }
-        .task{
-            await User.getAll(context: PersistenceController.shared.container.viewContext)
-            await Client.getAll(context: PersistenceController.shared.container.viewContext)
+            await (
+                User.getAll(context: context),
+                Client.getAll(context: context),
+                Application.getAll(context: context)
+            )
         }
         .sheet(isPresented: $newClient) {
             ClientNewView(isPresented: $newClient)

@@ -11,21 +11,24 @@ struct UserDetailView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) private var context
 
-    @State var user: User
-    @State var password: String = ""
+    @ObservedObject var user: User
+
+    init(user: User) {
+        self.user = user
+    }
 
     var body: some View {
         List {
             Section(header: Text("Details")) {
-                NavigationLink(destination: TextModify(fieldName: "Username", value: $user.nameValue)) {
+                NavigationLink(destination: TextModify(fieldName: "Username", target: $user.nameValue)) {
                     KeyValueText(left: "Name", right: $user.nameValue)
                 }
                 Toggle("Admin", isOn: $user.admin)
             }
 
             Section(header: Text("Danger Zone")) {
-                NavigationLink(destination: TextModify(fieldName: "Password", value: $password)) {
-                    KeyValueText(left: "New Password", right: $password)
+                NavigationLink(destination: TextModify(fieldName: "Password", target: $user.password, hidden: true)) {
+                    Text("New Password")
                 }
 
                 Text("Delete User")
@@ -38,10 +41,7 @@ struct UserDetailView: View {
         }
         .navigationTitle(user.nameValue)
         .navigationBarTitleDisplayMode(.inline)
-        .onDisappear {
-            Task { await user.put(context: context) }
-            // TODO: PUT REQUEST
-        }
+        .onDisappear { Task { await user.put(context: context) } }
     }
 }
 
