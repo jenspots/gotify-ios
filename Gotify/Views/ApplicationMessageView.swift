@@ -68,7 +68,7 @@ struct ApplicationMessageView: View {
             .foregroundColor(colorScheme == .dark ? .white : .black)
 
             Section(header: Text("Notifications")) {
-                ForEach(messages.filter { !$0.isDeleted }) { message in
+                ForEach(messages.filter { !$0.isDeleted }, id: \.self) { message in
                     NavigationLink(destination: MessageDetailView(application: application, message: message)) {
                         MessageRowComponent(message: message)
                     }
@@ -102,22 +102,40 @@ struct ApplicationMessageView: View {
             }
             
             ToolbarItem(placement: .navigationBarLeading) {
-                if editing() {
+                if editing() && messages.count != selection.count {
                     Button(action: { messages.forEach { x in selection.insert(x)} } ) {
                         Text("Select All")
+                    }
+                } else if editing() {
+                    Button(action: { selection.removeAll() } ) {
+                        Text("Select None")
                     }
                 }
             }
 
             ToolbarItemGroup(placement: .bottomBar) {
                 if editing() {
-                    Button(action: {}) {
-                        Text("Mark as read")
+                    HStack {
+                        Button(action: {
+                            selection.forEach { message in
+                                message.markAsRead()
+                            }
+                        }) {
+                            Text("Mark as read")
+                        }
+                        Spacer()
+                        Button(action: {
+                            selection.forEach { message in
+                                selection.remove(message)
+                                Task {
+                                    await message.delete(context: context)
+                                }
+                            }
+                        }) {
+                            Text("Remove")
+                        }
                     }
-                    Spacer()
-                    Button(action: {}) {
-                        Text("Remove")
-                    }
+                    .padding(.bottom, 5)
                 }
             }
 
