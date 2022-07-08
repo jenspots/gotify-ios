@@ -29,7 +29,7 @@ struct ApplicationNewView: View {
     var body: some View {
         NavigationView {
             List {
-                Section(header: Text("Name")) {
+                Section(header: Text("Name"), footer: Text("This field is required")) {
                     TextField("Application", text: $name)
                 }
 
@@ -46,6 +46,7 @@ struct ApplicationNewView: View {
                 .buttonBorderShape(.capsule)
                 .controlSize(.large)
                 .frame(width: 500)
+                .disabled(name == "")
                 ) { EmptyView() }
             }
             .navigationBarTitle("New Application")

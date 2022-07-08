@@ -27,7 +27,7 @@ struct ClientNewView: View {
     var body: some View {
         NavigationView {
             List {
-                Section(header: Text("Client Name")) {
+                Section(header: Text("Client Name"), footer: Text("This field is required")) {
                     TextField("Client Name", text: $name)
                 }
 
@@ -40,6 +40,7 @@ struct ClientNewView: View {
                 .buttonBorderShape(.capsule)
                 .controlSize(.large)
                 .frame(width: 500)
+                .disabled(name == "")
                 ) { EmptyView() }
             }
             .navigationBarTitle("New Client")

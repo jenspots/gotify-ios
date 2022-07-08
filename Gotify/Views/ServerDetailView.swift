@@ -42,8 +42,8 @@ struct ServerDetailView: View {
                 NavigationLink(destination: TextModify(fieldName: "URL", target: $serverUrl, description: urlDescription)) {
                     KeyValueText(left: "URL", right: $serverUrl)
                 }
-                NavigationLink(destination: TextModify(fieldName: "Token", target: $serverToken, description: tokenDescription)) {
-                    KeyValueText(left: "Token", right: $serverToken)
+                NavigationLink(destination: TextModify(fieldName: "Token", target: $serverToken, description: tokenDescription, hidden: true)) {
+                    KeyValueText(left: "Token", right: $serverToken, hidden: true)
                 }
             }
 
@@ -58,11 +58,6 @@ struct ServerDetailView: View {
                         Task { await applications[index].delete(context: context) }
                     }
                 }
-
-                Button(action: { newApplication.toggle() }) {
-                    Text("New Application")
-                }
-                .foregroundColor(.gray)
             }
 
             Section(header: Text("Clients")) {
@@ -76,11 +71,6 @@ struct ServerDetailView: View {
                         Task { await clients[index].delete(context: context) }
                     }
                 }
-
-                Button(action: { newClient.toggle() }) {
-                    Text("New Client")
-                }
-                .foregroundColor(.gray)
             }
 
             Section(header: Text("Users")) {
@@ -94,12 +84,6 @@ struct ServerDetailView: View {
                         Task { await users[index].delete(context: context) }
                     }
                 }
-
-                Button(action: { newUser.toggle() }) {
-                    Text("New User")
-                }
-                .foregroundColor(.gray)
-
             }
         }
         .navigationTitle(Server.shared.urlSansProtocol())
@@ -119,6 +103,17 @@ struct ServerDetailView: View {
         }
         .sheet(isPresented: $newApplication) {
             ApplicationNewView(isPresented: $newApplication)
+        }
+        .toolbar {
+            ToolbarItem {
+                Menu {
+                    Button(action: { newApplication.toggle() }) { Label("Application", systemImage: "network") }
+                    Button(action: { newClient.toggle() }) { Label("Client", systemImage: "laptopcomputer") }
+                    Button(action: { newUser.toggle() }) { Label("User", systemImage: "person") }
+                }  label: {
+                    Label("New", systemImage: "plus")
+                }
+            }
         }
     }
 }

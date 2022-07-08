@@ -31,11 +31,11 @@ struct UserNewView: View {
     var body: some View {
         NavigationView() {
             List {
-                Section(header: Text("Username")) {
+                Section(header: Text("Username"), footer: Text("This field is required")) {
                     TextField("Username", text: $username)
                 }
 
-                Section(header: Text("Password")) {
+                Section(header: Text("Password"), footer: Text("This field is required")) {
                     TextField("Password", text: $password)
                 }
 
@@ -52,6 +52,7 @@ struct UserNewView: View {
                 .buttonBorderShape(.capsule)
                 .controlSize(.large)
                 .frame(width: 500)
+                .disabled(username == "" || password == "")
                 ) { EmptyView() }
             }
             .navigationBarTitle("New User")
