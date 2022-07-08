@@ -36,7 +36,6 @@ struct KeyValueText: View {
         self.hidden = hidden
     }
 
-
     var body: some View {
         HStack {
             Text(left)

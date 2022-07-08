@@ -12,14 +12,14 @@ struct ServerRowComponent: View {
 
     @AppStorage("serverUrl") var serverUrl: String = ""
     @State var server: Server
-    @State var connected: Bool? = nil
-    
+    @State var connected: Bool?
+
     let timer = Timer.publish(
         every: 30,
         on: .main,
         in: .common
     ).autoconnect()
-    
+
     func checkHealth() {
         Task {
             let healthCheck = await Server.shared.healthCheck()

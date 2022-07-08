@@ -10,10 +10,10 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @AppStorage("notificationsActiveGlobal") var notificationsActiveGlobal: Bool = true
+    @AppStorage("notificationsActiveGlobal") var notificationsActiveGlobal = true
 
     @State var newtoken: String = ""
-    
+
     var footerText: String =
 """
 Disable this setting to receive no notifications whatsoever. This overrides application specific settings until turned off.
@@ -25,7 +25,7 @@ Disable this setting to receive no notifications whatsoever. This overrides appl
                 Section {
                     ServerRowComponent(server: .shared)
                 }
-                
+
                 Section(header: Text("General"), footer: Text(footerText)) {
                     Toggle(isOn: $notificationsActiveGlobal) {
                         Text("All Notifications")
@@ -77,7 +77,6 @@ Disable this setting to receive no notifications whatsoever. This overrides appl
                                 .foregroundColor(.red)
                     }
                 }
-
             }
             .navigationTitle("Settings")
         }

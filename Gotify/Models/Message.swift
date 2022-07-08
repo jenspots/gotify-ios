@@ -6,41 +6,38 @@
 //
 //
 
-import SwiftyJSON
 import CoreData
 import SwiftUI
+import SwiftyJSON
 
 private class PaginatedMessages: Serializable {
-    
     fileprivate let messages: [Message]
     fileprivate let paging: Paging
-    
+
     init(messages: [Message], paging: Paging) {
         self.messages = messages
         self.paging = paging
     }
-    
+
     static func fromJSON(json: JSON) -> Self {
         let messages = [Message].fromJSON(json: json["messages"])
         let paging = Paging.fromJSON(json: json["paging"])
         return PaginatedMessages(messages: messages, paging: paging) as! Self
     }
-    
+
     func toJSON() -> JSON {
         var result = JSON()
         result["messages"] = messages.toJSON()
         result["paging"] = paging.toJSON()
         return result
     }
-    
 }
 
 public class Message: NSManagedObject, Serializable {
-    
     static func new() -> Message {
         Message(entity: entity(), insertInto: nil)
     }
-    
+
     // Required for the fromJSON function.
     static let dateFormatter: DateFormatter = {
         let result = DateFormatter()
@@ -60,7 +57,7 @@ public class Message: NSManagedObject, Serializable {
         result.title = json["title"].string
         return result as! Self
     }
-    
+
     // Serializable
     func toJSON() -> JSON {
         JSON([
@@ -79,14 +76,14 @@ public class Message: NSManagedObject, Serializable {
         }
 
         context.delete(self)
-        
+
         // Make the request
         let (status, _): (Int, Nil?) = await API.request(
             slug: "/message/\(id)",
             body: nil,
             method: .delete
         )
-        
+
         if status == 200 {
             DispatchQueue.main.async {
                 do {
@@ -99,7 +96,7 @@ public class Message: NSManagedObject, Serializable {
 
         return nil
     }
-    
+
     /* Retrieve new Applications from the server. */
     static func getAll(context: NSManagedObjectContext, application: Application? = nil) async -> GotifyError? {
         var slug: String
@@ -114,23 +111,23 @@ public class Message: NSManagedObject, Serializable {
             body: nil,
             method: .get
         )
-        
+
         if let messages = paginatedMessages?.messages {
             for message in messages {
                 do {
                     let request = Message.fetchRequest()
                     request.predicate = NSPredicate(format: "id == %d", message.id)
                     let queryResult = try context.fetch(request)
-                    
+
                     if queryResult.count > 2 {
                         fatalError("Core Data Error: uniqueness constrained broken")
                     }
-                    
+
                     // Note: messages cant be updated, so we just check if it exists locally.
                     if queryResult.first == nil {
                         context.insert(message)
                     }
-                                        
+
                     DispatchQueue.main.async { try? context.save() }
                 } catch {
                     print(error.localizedDescription)
@@ -141,22 +138,22 @@ public class Message: NSManagedObject, Serializable {
         DispatchQueue.main.async { try? context.save() }
         return nil
     }
-    
+
     func markAsRead() {
         read = true
         try? PersistenceController.shared.container.viewContext.save()
     }
-    
+
     func markAsUnread() {
         read = false
         try? PersistenceController.shared.container.viewContext.save()
     }
-    
+
     func toggleRead() {
         read.toggle()
         try? PersistenceController.shared.container.viewContext.save()
     }
-    
+
     static func fetchUnreadCount(application: Application) -> FetchRequest<Message> {
         FetchRequest<Message>(
                 sortDescriptors: [],
@@ -164,5 +161,4 @@ public class Message: NSManagedObject, Serializable {
                 animation: .default
         )
     }
-    
 }

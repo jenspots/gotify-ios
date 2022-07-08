@@ -44,4 +44,3 @@ struct UserDetailView: View {
         .onDisappear { Task { await user.put(context: context) } }
     }
 }
-

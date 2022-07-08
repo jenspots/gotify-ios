@@ -1,4 +1,4 @@
- //
+//
 //  HomeView.swift
 //  Gotify
 //
@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-
     @AppStorage("serverUrl") var serverUrl: String = ""
     @AppStorage("serverToken") var serverToken: String = ""
     @Environment(\.managedObjectContext) private var context
@@ -18,11 +17,11 @@ struct ContentView: View {
         _noConfigurationSet = Binding(get: {
             if let serverUrl = UserDefaults.standard.string(forKey: "serverUrl") {
                 if let serverToken = UserDefaults.standard.string(forKey: "serverToken") {
-                    return serverUrl == "" || serverToken == ""
+                    return serverUrl.isEmpty || serverToken.isEmpty
                 }
             }
             return true
-        }, set: { x in
+        }, set: { _ in
             // do nothing
         })
     }
@@ -38,10 +37,9 @@ struct ContentView: View {
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }
-
         }
         .sheet(isPresented: $noConfigurationSet) { WelcomeView(url: serverUrl, token: serverToken) }
-        .task { await Application.getAll(context: context)}
+        .task { await Application.getAll(context: context) }
     }
 }
 

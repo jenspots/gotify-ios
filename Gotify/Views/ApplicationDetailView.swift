@@ -12,17 +12,17 @@ struct ApplicationDetailView: View {
     @Environment(\.managedObjectContext) private var context
 
     @ObservedObject var application: Application
-    @AppStorage("notificationsActiveGlobal") var notificationsActiveGlobal: Bool = true
+    @AppStorage("notificationsActiveGlobal") var notificationsActiveGlobal = true
 
     init(application: Application) {
         self.application = application
     }
-    
+
     var disabledDescription: String =
 """
 Notifications are disabled globally and need to be enabled before changing application specific behavior.
 """
-    
+
     var body: some View {
         List {
             Section(header: Text("Details"), footer: Text(notificationsActiveGlobal ? "" : disabledDescription)) {
@@ -53,4 +53,3 @@ Notifications are disabled globally and need to be enabled before changing appli
         }
     }
 }
-

@@ -21,9 +21,9 @@ struct ServerDetailView: View {
     @FetchRequest var applications: FetchedResults<Application>
 
     // Sheet controllers
-    @State var newClient: Bool = false
-    @State var newApplication: Bool = false
-    @State var newUser: Bool = false
+    @State var newClient = false
+    @State var newApplication = false
+    @State var newUser = false
 
     // Text components
     var urlDescription: String = "To guarantee a secure connection, HTTPS is required. Both IP addresses and domain names are accepted."

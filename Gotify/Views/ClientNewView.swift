@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ClientNewView: View {
-
     @Environment(\.managedObjectContext) private var context
     @State private var name: String = ""
     @Binding var isPresented: Bool
@@ -40,19 +39,20 @@ struct ClientNewView: View {
                 .buttonBorderShape(.capsule)
                 .controlSize(.large)
                 .frame(width: 500)
-                .disabled(name == "")
+                .disabled(name.isEmpty)
                 ) { EmptyView() }
             }
             .navigationBarTitle("New Client")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { isPresented = false }) {
+                    Button {
+                        isPresented = false
+                    } label: {
                         Text("Cancel")
                     }
                 }
             }
         }
-
     }
 }

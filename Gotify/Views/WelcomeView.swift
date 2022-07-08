@@ -18,7 +18,7 @@ struct WelcomeView: View {
 
     var welcomeText: String =
     """
-    Welcome to Gotify! To get started, please authenticate using your credentials. You can change these at any time in the settings menu.                   
+    Welcome to Gotify! To get started, please authenticate using your credentials. You can change these at any time in the settings menu.
     """
 
     var text: some View {
@@ -40,7 +40,6 @@ struct WelcomeView: View {
     var body: some View {
         NavigationView {
             List {
-
                 Section(header: text) {}
 
                 Section(header: Text("Server URL")) {

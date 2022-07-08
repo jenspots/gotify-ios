@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct ApplicationListView: View {
-
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest var apps: FetchedResults<Application>
-    @State var newApplication: Bool = false
+    @State var newApplication = false
 
     init() {
         self._apps = Application.fetchAll()

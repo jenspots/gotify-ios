@@ -6,13 +6,12 @@
 //
 //
 
-import Foundation
-import SwiftyJSON
 import CoreData
+import Foundation
 import SwiftUI
+import SwiftyJSON
 
 public class User: NSManagedObject, Serializable {
-
     var password: String = ""
 
     var nameValue: String {

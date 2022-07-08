@@ -5,13 +5,12 @@
 //  Created by Jens Pots on 05/07/2022.
 //
 
-import Foundation
-import SwiftyJSON
 import CoreData
+import Foundation
 import SwiftUI
+import SwiftyJSON
 
 public class Client: NSManagedObject, Serializable {
-
     var nameValue: String {
         get { name! }
         set { name = newValue }
@@ -124,5 +123,4 @@ public class Client: NSManagedObject, Serializable {
             animation: .default
         )
     }
-
 }

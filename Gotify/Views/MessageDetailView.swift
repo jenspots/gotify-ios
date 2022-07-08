@@ -13,10 +13,10 @@ struct MessageDetailView: View {
 
     var application: Application
     var message: Message
-    
+
     @State var title: String
     @State var messageBody: String
-    
+
     init(application: Application, message: Message) {
         self.application = application
         self.message = message

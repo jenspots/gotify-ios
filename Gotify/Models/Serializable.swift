@@ -8,7 +8,6 @@
 import SwiftyJSON
 
 protocol Serializable {
-
     // Convert an instance to JSON
     func toJSON() -> JSON
 

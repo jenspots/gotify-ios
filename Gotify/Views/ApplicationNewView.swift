@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ApplicationNewView: View {
-
     @Environment(\.managedObjectContext) private var context
     @State private var name: String = ""
     @State private var description: String = ""

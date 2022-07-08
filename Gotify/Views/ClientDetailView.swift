@@ -30,7 +30,7 @@ struct ClientDetailView: View {
                 Text("Delete Client")
                     .foregroundColor(.red)
                     .onTapGesture {
-                        Task { await client.delete(context: context) } 
+                        Task { await client.delete(context: context) }
                         dismiss()
                     }
             }

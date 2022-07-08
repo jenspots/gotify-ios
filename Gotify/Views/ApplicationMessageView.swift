@@ -20,17 +20,17 @@ struct ApplicationMessageView: View {
 
     @FetchRequest
     var messages: FetchedResults<Message>
-    
+
     init(application: Application) {
         self._application = State(wrappedValue: application)
-        
+
         _messages = FetchRequest<Message>(
             sortDescriptors: [NSSortDescriptor(keyPath: \Message.date, ascending: false)],
             predicate: NSPredicate(format: "appid == %d", application.id),
             animation: .default
         )
     }
-    
+
     func editing() -> Bool {
         if let editMode = editMode {
             return editMode.wrappedValue == .active
@@ -38,7 +38,7 @@ struct ApplicationMessageView: View {
             return false
         }
     }
-        
+
     var body: some View {
         List(selection: $selection) {
             Section(content: {}, header: {
@@ -100,14 +100,14 @@ struct ApplicationMessageView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 EditButton()
             }
-            
+
             ToolbarItem(placement: .navigationBarLeading) {
                 if editing() && messages.count != selection.count {
-                    Button(action: { messages.forEach { x in selection.insert(x)} } ) {
+                    Button(action: { messages.forEach { x in selection.insert(x) } }) {
                         Text("Select All")
                     }
                 } else if editing() {
-                    Button(action: { selection.removeAll() } ) {
+                    Button(action: { selection.removeAll() }) {
                         Text("Select None")
                     }
                 }
@@ -138,7 +138,6 @@ struct ApplicationMessageView: View {
                     .padding(.bottom, 5)
                 }
             }
-
         }
         .navigationBarBackButtonHidden(editing())
     }

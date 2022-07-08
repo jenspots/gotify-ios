@@ -31,7 +31,7 @@ struct NavigationButton<Destination: View, Label: View>: View {
 }
 
 // This view lets us avoid instantiating our Destination before it has been pushed.
-fileprivate struct LazyDestination<Destination: View>: View {
+private struct LazyDestination<Destination: View>: View {
     var destination: () -> Destination
     var body: some View {
         self.destination()

@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import SwiftyJSON
 import SwiftUI
+import SwiftyJSON
 
 struct HealthCheck: Serializable {
     let database: Bool
@@ -24,7 +24,6 @@ struct HealthCheck: Serializable {
         let health = json["health"].string!
         return HealthCheck(database: database == "green", health: health == "green")
     }
-
 }
 
 struct Server {

@@ -5,8 +5,8 @@
 //  Created by Jens Pots on 01/07/2022.
 //
 
-import SwiftyJSON
 import Foundation
+import SwiftyJSON
 
 struct Paging: Serializable {
     var limit: Int64

@@ -6,7 +6,6 @@ import Foundation
 import SwiftUI
 
 extension Binding where Value == String {
-
     init(forKey: String) {
         self.init(get: {
             (UserDefaults.standard.string(forKey: forKey) ?? "")

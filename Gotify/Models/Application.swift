@@ -7,12 +7,11 @@
 //
 
 import CoreData
-import SwiftyJSON
 import Foundation
 import SwiftUI
+import SwiftyJSON
 
 public final class Application: NSManagedObject, Serializable {
-
     var slug: String {
         get { "/application/\(id)" }
     }

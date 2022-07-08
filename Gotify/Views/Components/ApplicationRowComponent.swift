@@ -15,7 +15,7 @@ struct ApplicationRowComponent: View {
     init(application: Application) {
         self.application = application
     }
-    
+
     var body: some View {
         NavigationButton {
             Task {

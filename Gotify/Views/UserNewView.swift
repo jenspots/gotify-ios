@@ -8,11 +8,10 @@
 import SwiftUI
 
 struct UserNewView: View {
-
     @Environment(\.managedObjectContext) private var context
     @State private var username: String = ""
     @State private var password: String = ""
-    @State private var admin: Bool = false
+    @State private var admin = false
     @Binding var isPresented: Bool
 
     init(isPresented: Binding<Bool>) {
@@ -29,7 +28,7 @@ struct UserNewView: View {
     }
 
     var body: some View {
-        NavigationView() {
+        NavigationView {
             List {
                 Section(header: Text("Username"), footer: Text("This field is required")) {
                     TextField("Username", text: $username)
@@ -65,6 +64,5 @@ struct UserNewView: View {
                 }
             }
         }
-
     }
 }

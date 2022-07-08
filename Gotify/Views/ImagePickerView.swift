@@ -5,9 +5,9 @@
 //  Created by Jens Pots on 01/07/2022.
 //
 
+import PhotosUI
 import SwiftUI
 import UIKit
-import PhotosUI
 
 struct ImagePicker: UIViewControllerRepresentable {
   @Environment(\.presentationMode) private var presentationMode // allows you to dismiss the image picker overlay
@@ -39,7 +39,7 @@ struct ImagePicker: UIViewControllerRepresentable {
     }
 
     func imagePickerController(_ picker: UIImagePickerController,
-                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
       if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
         control.selectedImage = image
         control.didSet = true
